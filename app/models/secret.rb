@@ -6,4 +6,8 @@ class Secret < ActiveRecord::Base
   validates :title, :length => { :in => 4..24 }
   validates :body, :length => { :in => 4..140 }
 
+
+  def self.last_five
+    limit(5)
+  end
 end

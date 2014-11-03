@@ -5,7 +5,7 @@ class SecretsController < ApplicationController
   # GET /secrets
   # GET /secrets.json
   def index
-    @secrets = Secret.all
+    @secrets = Secret.last_five
   end
 
   # GET /secrets/1
