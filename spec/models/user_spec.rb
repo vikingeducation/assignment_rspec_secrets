@@ -14,9 +14,6 @@ describe User do
   it "will respond to secrets association" do
     expect(user).to respond_to(:secrets)
   end
-  it "is valid with a name and email"
-  it "is invalid without an email address"
-  it "is invalid without a name"
 
   describe "attributes" do
 
@@ -53,6 +50,17 @@ describe User do
         expect(new_user).to be_valid
       end
     end
+
+    context "bad" do
+      it "is invalid without an email address" do
+        new_user = build(:user, :email => nil)
+        expect(new_user.valid?).to eq(false)
+      end
+      it "is invalid without a name" do
+        new_user = build(:user, :name => nil)
+        expect(new_user.valid?).to eq(false)
+      end
+    end
   end
 end
 
@@ -63,10 +71,6 @@ describe Secret do
   end 
   describe "attributes" do 
     context "various lengths of attributes" do 
-      before do 
-        secret.save!
-      end
-
       it "will reject a short title" do 
         new_secret = build(:secret, :title => "hi")
         expect(new_secret).not_to be_valid
@@ -79,7 +83,7 @@ describe Secret do
 
       it "does not mind a regular length title" do
         new_secret = build(:secret, :title => "sweet man! :)")
-        expect(new_secret).not_to be_valid
+        expect(new_secret).to be_valid
       end
     end
   end
