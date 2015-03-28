@@ -49,8 +49,29 @@ feature 'User accounts feature testing' do
   end
 
   context "as signed in user" do 
-    scenario "create a secret"
-    scenario "edit a secret"
-    scenario "delete a secret"
+    before do
+      sign_in(user)
+    end
+
+    scenario "create a secret" do
+      visit root_path
+      click_link "New Secret"
+      fill_in "Title", with: "wowsuchsecret"
+      fill_in "Body", with: "this is my secret yo"
+      click_button "Create Secret"
+
+      expect(page).to have_content "Secret was successfully created."
+      expect(page).to have_content "wowsuchsecret"
+      expect(page).to have_content "this is my secret yo"
+    end
+
+    scenario "edit a user" do
+      visit root_path
+      click_link user.name
+      click_link "Edit"
+      fill_in "Name", with: user.name + "x"
+      click_button "Update User"
+      expect(page).to have_content user.name + "x"
+    end
   end
 end
