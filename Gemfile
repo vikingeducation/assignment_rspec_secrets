@@ -29,7 +29,6 @@ gem 'spring',        group: :development
 gem 'hirb',                      group: :development
 gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger',  group: :development
 
-gem 'pry-byebug', group: :development
 
 
 gem 'faker'
@@ -39,6 +38,8 @@ gem 'bcrypt', '~> 3.1.7'
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'factory_girl_rails', '~> 4.0'
+  gem 'pry-byebug'
 end
 
 group :development do
