@@ -66,9 +66,11 @@ end
 
 describe Secret do
   let(:secret){ build(:secret)}
-  it "belongs to users association" do
-    expect(secret).to belong_to(:user)
-  end 
+
+  it "responds to user" do
+    expect(secret).to respond_to(:author)
+  end
+  
   describe "attributes" do 
     context "various lengths of attributes" do 
       it "will reject a short title" do 
