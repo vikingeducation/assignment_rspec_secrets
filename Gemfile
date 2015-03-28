@@ -42,6 +42,11 @@ group :development, :test do
   gem 'pry-byebug'
 end
 
+group :test do
+  gem 'capybara'
+  gem 'launchy'
+end
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'

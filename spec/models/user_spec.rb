@@ -18,17 +18,17 @@ describe User do
   describe "attributes" do
 
     context "when names or passwords are wrong length" do 
-      before do
-        user.save!
-      end
+
       it "doesn't allow short names" do 
         new_user = build(:user, :name => "wa")
         expect(new_user).not_to be_valid
       end
+
       it "doesn't allow long name" do 
         new_user = build(:user, :name => "waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         expect(new_user).not_to be_valid
       end
+
       it "doesn't allow short passwords" do 
         new_user = build(:user, :password => "whale")
         expect(new_user).not_to be_valid
@@ -70,7 +70,7 @@ describe Secret do
   it "responds to user" do
     expect(secret).to respond_to(:author)
   end
-  
+
   describe "attributes" do 
     context "various lengths of attributes" do 
       it "will reject a short title" do 
