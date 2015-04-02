@@ -18,4 +18,13 @@ describe UsersController do
       expect(response).to render_template :new
     end
   end
+  describe 'GET #edit' do
+    it 'sets the right instance variables'
+    it 'user is able to edit their own account'
+    it 'user is not able to edit another user\'s account'
+  end
+  describe 'DELETE #destroy' do
+    it 'user is able to delete their own account'
+    it 'user is not able to delete another user\'s account'
+  end
 end
