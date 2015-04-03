@@ -73,4 +73,5 @@ class SecretsController < ApplicationController
     def secret_params
       params.require(:secret).permit(:title, :body)
     end
+
 end
