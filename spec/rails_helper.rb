@@ -53,4 +53,16 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.include FactoryGirl::Syntax::Methods
   config.include LoginMacros
+
+  config.before(:each, type: :view) do
+    config.mock_with :rspec do |mocks|
+      mocks.verify_partial_doubles = false
+    end
+  end
+
+  config.after(:each, type: :view) do
+    config.mock_with :rspec do |mocks|
+      mocks.verify_partial_doubles = true
+    end
+  end
 end
