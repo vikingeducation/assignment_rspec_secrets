@@ -1,13 +1,19 @@
 FactoryGirl.define do
-  factory :user do
+  factory :user, aliases: [:author] do
     name  "Foo"
-    email  "foo@bar.com"
+    sequence(:email) do |n| "foo#{n}@gmail.com" end
     password "password"
   end
 
-  factroy :secret do
+  factory :secret do
+
+    # trait :author do
+    #   after(:create) do |secret|
+    #     secret.author_id = create(:user)
+    #   end
+    # end
     title     "secret"
     body      "liufrifuhriuofheuiohei qweiofuq iou"
-    author_id 1
+    author 
   end
 end

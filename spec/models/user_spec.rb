@@ -48,7 +48,6 @@ describe User do
     end
   end
 
-  # Bad
   it "responds to secrets assosciation" do
     expect(user).to respond_to(:secrets)
   end
