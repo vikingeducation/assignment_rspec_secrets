@@ -4,6 +4,7 @@
 # 3. Creation requires a password
 # 4. Creation requires a password between 6 and 16 characters
 # 5. Login is valid with email and password
+# 6. A single user can have multiple secrets
 
 # # Bad paths
 
@@ -68,6 +69,11 @@ describe User do
 
 	it "respond to the secrets association" do
 		expect(user).to respond_to(:secrets)
+	end
+
+	specify "a user can have many secrets" do
+		secrets = create_list(:secret, 5, :author => user)
+		expect(user.secrets).to eq(secrets)
 	end
 
 end
