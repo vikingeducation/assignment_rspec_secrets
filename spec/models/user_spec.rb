@@ -1,7 +1,68 @@
+# spec/models/user_spec.rb
+require 'rails_helper'
+
 describe User do
   let(:user) { build(:user) }
 
-  it "is valid with a name, an email and a password" do
-    
+  it "is valid with default attributes" do
+    expect(user).to be_valid
+  end
+
+  it "is not valid without a password" do
+    user.password_digest = nil
+    expect(user).not_to be_valid
+  end
+
+  it "is not valid without an email" do
+    user.email = nil
+    expect(user).not_to be_valid
+  end
+
+  it "is not valid without a name" do
+    user.name = nil
+    expect(user).not_to be_valid
+  end
+
+  describe "name" do
+
+    specify "length cannot be less than 3" do
+      user2 = build(:user, :name => "fo")
+      expect(user2).not_to be_valid
+    end
+
+    specify "length cannot be greater than 20" do
+      user2 = build(:user, :name => "foooooooooooooooooooo")
+      expect(user2).not_to be_valid
+    end
+
+    specify "length is between 3 and 20" do
+      user2 = build(:user, :name => "foo")
+      expect(user2).to be_valid
+
+      user3 = build(:user, :name => "fooooooooooooooooooo")
+      expect(user3).to be_valid
+    end
+  end
+
+  describe "email" do
+
+    before do
+      user.save
+    end
+
+    it "should be unique" do
+      user2 = build(:user, email: user.email)
+      expect(user2).not_to be_valid
+    end
+
+  end
+
+  describe "password" do
+
+    specify "length cannot be less than 6" do
+      user2 = build(:user, :password => nil)
+      expect(user2).not_to be_valid
+    end
+
   end
 end
