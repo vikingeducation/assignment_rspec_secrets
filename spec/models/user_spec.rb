@@ -14,7 +14,7 @@ describe User do
   end
 
   it "will fail without email" do
-    new_user = build(:user, name: "foobar", email: nil,
+    new_user = build(:user, name: 13, email: nil,
                 password: "foobar", password_confirmation: "foobar")
 
     expect(new_user).to_not be_valid
