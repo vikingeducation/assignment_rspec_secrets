@@ -60,9 +60,46 @@ describe User do
   describe "password" do
 
     specify "length cannot be less than 6" do
-      user2 = build(:user, :password => nil)
+      user2 = build(:user, :password => "foofo", :password_confirmation => "foofo")
       expect(user2).not_to be_valid
     end
 
+    specify "length cannot be greater than 16" do
+      user2 = build(:user, :password => "foofofoofofoofofo", :password_confirmation => "foofofoofofoofofo")
+      expect(user2).not_to be_valid
+    end
+
+    specify "length should be between 6 and 16" do
+      user2 = build(:user, :password => "foofoo", :password_confirmation => "foofoo")
+      expect(user2).to be_valid
+
+      user3 = build(:user, :password => "foofoofoofooffff", :password_confirmation => "foofoofoofooffff")
+      expect(user3).to be_valid
+    end
+  end
+
+  context "association" do
+    it "should respond to secrets" do
+      expect(user).to respond_to(:secrets)
+    end
+
+    it "can have many secrets" do
+      user.secrets = build_list(:secret, 3)
+      user.save
+      expect(user.secrets.count).to eq(3) 
+    end
   end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
