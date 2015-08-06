@@ -9,6 +9,12 @@ describe User do
   end
 
   it "is not valid without a password" do
+    user.password = nil
+    user.password_confirmation = nil
+    expect(user).not_to be_valid
+  end
+
+  it "is not valid without a password digest" do
     user.password_digest = nil
     expect(user).not_to be_valid
   end
@@ -35,10 +41,12 @@ describe User do
       expect(user2).not_to be_valid
     end
 
-    specify "length is between 3 and 20" do
+    specify "length can be 3" do
       user2 = build(:user, :name => "foo")
       expect(user2).to be_valid
+    end
 
+    specify "length can be up to 20" do
       user3 = build(:user, :name => "fooooooooooooooooooo")
       expect(user3).to be_valid
     end
@@ -86,7 +94,7 @@ describe User do
     it "can have many secrets" do
       user.secrets = build_list(:secret, 3)
       user.save
-      expect(user.secrets.count).to eq(3) 
+      expect(user.secrets.count).to eq(3)
     end
   end
 end

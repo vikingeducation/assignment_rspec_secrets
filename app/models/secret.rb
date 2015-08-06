@@ -8,6 +8,6 @@ class Secret < ActiveRecord::Base
 
 
   def self.last_five
-    limit(5)
+    limit(5).order(created_at: :desc)
   end
 end
