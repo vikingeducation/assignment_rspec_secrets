@@ -1,20 +1,32 @@
-require 'rails-helper'
+require 'rails_helper'
+#require './app/models/user'
 
-let(:user){ build(:user) }
 
 describe User do
+  let(:user){ build(:user) }
 
   # Happy
+  it "is valid with default attributes" do
+    expect(user).to be_valid
+  end
 
-  it "requires a name"
+  it "requires a name and email" do 
+    expect(user).to be_valid
+  end
 
-  it "requires an email"
+  
 
   # Sad
 
-  it "doesn't allow a name shorter than 3 characters"
+  it "doesn't allow a name shorter than 3 characters" do
+    user.name="Om"
+    expect(user).to_not be_valid
+  end
 
-  it "doesn't allow a name longer than 20 characters"
+  it "doesn't allow a name longer than 20 characters" do
+    user.name="Omverylongnameverylongname"
+    expect(user).to_not be_valid
+  end
 
   it "doesn't allow a password shorter than 6 characters"
 
