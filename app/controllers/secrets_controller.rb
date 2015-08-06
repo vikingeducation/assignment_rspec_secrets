@@ -27,7 +27,6 @@ class SecretsController < ApplicationController
   # POST /secrets.json
   def create
     @secret = current_user.secrets.build(secret_params)
-
     respond_to do |format|
       if @secret.save
         format.html { redirect_to @secret, notice: 'Secret was successfully created.' }

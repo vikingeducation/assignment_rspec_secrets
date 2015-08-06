@@ -34,9 +34,9 @@ describe User do
 		expect(new_user).to be_invalid
 	end
 
-	it "each user has a unique email" do 
-		user1 = build(:user)
-		user2 = build(:user)
+	it "each saved user has a unique email" do 
+		user1 = create(:user)
+		user2 = create(:user)
 		expect(user1.email == user2.email).to_not be_truthy
 	end
 	
@@ -48,7 +48,37 @@ describe User do
 		expect(user2).to be_invalid
 	end
 	
-	# it "requires a password"
-	# it "is invalid without a password"
+	it "is valid with a password between 6 and 16 chars" do
+		user.password = "123456"
+		user.save
+		expect(user).to be_valid
+	end
+
+	it "is invalid without a password" do
+		user.password = nil
+		user.save
+		expect(user).to be_invalid
+	end
+
+	it "is invalid with a password less than 6 chars" do
+		user.password = "123"
+		user.save
+		expect(user).to be_invalid
+	end
+
+	it "respond to the secrets association" do
+		expect(user).to respond_to(:secrets)
+	end
 
 end
+
+
+
+
+
+
+
+
+
+
+

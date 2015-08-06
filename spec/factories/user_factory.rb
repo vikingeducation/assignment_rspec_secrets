@@ -1,6 +1,6 @@
 FactoryGirl.define do 
 
-	factory :user do
+	factory :user, :aliases => [:author] do
 		sequence(:name) do |n|
 			"foo#{n}"
 		end
