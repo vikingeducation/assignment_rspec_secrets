@@ -10,11 +10,11 @@ describe User do
     expect(user).to be_valid
   end
 
-  it "requires a name and email" do 
+  it "requires a name and email" do
     expect(user).to be_valid
   end
 
-  
+
 
   # Sad
 
@@ -28,15 +28,30 @@ describe User do
     expect(user).to_not be_valid
   end
 
-  it "doesn't allow a password shorter than 6 characters"
+  it "doesn't allow a password shorter than 6 characters" do
+    user.password="test"
+    expect(user).to_not be_valid
+  end
 
-  it "doesn't allow a password longer than 16 characters"
+  it "doesn't allow a password longer than 16 characters" do
+    user.password="qwertyuiopqwertyuiopqwertyuiop"
+    expect(user).to_not be_valid
+  end
 
-  it "doesn't allow a duplicate email"
+  context "when saving multiple users" do
+    before do
+      user.save!
+    end
+    it "doesn't allow identical email addresses" do
+      new_user = build(:user, :email => user.email)
+      expect(new_user.valid?).to eq(false)
+    end
+  end
 
   # Bad
-
-  it "requires a matching password confirmation"
+  it "responds to secrets assosciation" do
+    expect(user).to respond_to(:secrets)
+  end
 
   # password confirmation
 
