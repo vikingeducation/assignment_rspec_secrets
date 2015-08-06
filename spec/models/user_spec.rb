@@ -26,6 +26,7 @@ describe User do
 		expect(user).to be_valid
 	end
 
+	# change test as this user is only checking our factory method
 	it "is valid with a name and email" do 
 		expect(user.name && user.email).to_not be_nil 
 	end
@@ -35,6 +36,7 @@ describe User do
 		expect(new_user).to be_invalid
 	end
 
+	# change to test below as user1 and 2 currently are only factory objects 
 	it "each saved user has a unique email" do 
 		user1 = create(:user)
 		user2 = create(:user)
@@ -51,19 +53,16 @@ describe User do
 	
 	it "is valid with a password between 6 and 16 chars" do
 		user.password = "123456"
-		user.save
 		expect(user).to be_valid
 	end
 
 	it "is invalid without a password" do
 		user.password = nil
-		user.save
 		expect(user).to be_invalid
 	end
 
 	it "is invalid with a password less than 6 chars" do
 		user.password = "123"
-		user.save
 		expect(user).to be_invalid
 	end
 
