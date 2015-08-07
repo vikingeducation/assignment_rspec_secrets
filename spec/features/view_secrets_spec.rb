@@ -30,12 +30,7 @@ end
 
 
 
-#sign in
-#existing user can sign in
-#non-existing user cannot sign in
-#can view author once signed in
-#expect my name to be displayed on page with welcome msg
-#can log out
+
 
 #creating secrets
 #signed in user can create secret
