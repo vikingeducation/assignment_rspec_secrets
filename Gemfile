@@ -37,6 +37,11 @@ group :development, :test do
   gem 'guard-rspec'
 end
 
+group :test do
+  gem 'capybara'
+  gem 'launchy'
+end
+
 group :development do
   gem 'guard-rspec', require: false
 end

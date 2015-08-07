@@ -14,6 +14,6 @@ FactoryGirl.define do
     # end
     title     "secret"
     body      "liufrifuhriuofheuiohei qweiofuq iou"
-    author 
+    author
   end
 end
