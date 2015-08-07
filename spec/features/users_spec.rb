@@ -108,7 +108,7 @@ feature 'User work with secrets' do
 
   scenario "can't delete others secrets"  
 
-
+ 
 end
 
 
