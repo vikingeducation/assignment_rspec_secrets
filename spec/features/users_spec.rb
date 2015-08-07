@@ -27,12 +27,14 @@ feature 'user interaction' do
       click_link('New User')
     end
 
-    scenario 'clicking the New User link should bring me to a signup page' do
-      expect(page).to have_css('#user_name')
-    end
-
-    scenario 'there should not be a users table on the signup page' do
-      expect(page).to_not have_selector('table')
+    scenario 'user should be able to sign up with valid information' do
+      expect(page).to have_css('#user_name') #clicking the New User link should bring me to a signup page
+      expect(page).to_not have_selector('table') #there should not be a users table on the signup page
+      fill_in 'user_name', with: 'abcdefg'
+      fill_in 'user_email', with: 'test@foo.bar'
+      fill_in 'user_password', with: "dddddddd"
+      fill_in 'user_password_confirmation', with: "dddddddd"
+      expect{click_button 'Create User'}.to change(User, :count).by(1)
     end
 
     scenario 'user should not be able to sign up with invalid information' do
@@ -49,16 +51,7 @@ feature 'user interaction' do
       fill_in 'user_email', with: 'b'
       fill_in 'user_password', with: "dddddddd"
       fill_in 'user_password_confirmation', with: "dddddddd"
-
       expect{click_button 'Create User'}.to change(User, :count).by(0)
-    end
-
-    scenario 'user should be able to sign up with valid information' do
-      fill_in 'user_name', with: 'abcdefg'
-      fill_in 'user_email', with: 'test@foo.bar'
-      fill_in 'user_password', with: "dddddddd"
-      fill_in 'user_password_confirmation', with: "dddddddd"
-      expect{click_button 'Create User'}.to change(User, :count).by(1)
     end
   end
 
@@ -136,11 +129,8 @@ feature 'user interaction' do
       click_link 'New Secret'
     end
 
-    scenario 'should be brought to login page' do
+    scenario 'should be brought to login page not secret page' do
       expect(current_url).to eq(new_session_url)
-    end
-
-    scenario 'new secret page does not render' do
       expect(current_url).to_not eq(new_secret_url)
     end
 
@@ -209,6 +199,34 @@ feature 'user interaction' do
         expect(page).to have_selector("input[value='TH']")
         expect(page).to have_css('#error_explanation')
       end
+    end
+
+    # As a signed-in user, I want to be able to delete one of my secrets
+    context 'user can delete owned secret after sign in' do
+     
+      before do 
+        sign_in
+      end
+
+      scenario 'destroy link should not be present on index page without owned secret' do
+        create(:secret)
+        visit root_path
+        expect(page).to_not have_link('Destroy') 
+      end
+
+      scenario 'destroy link should be present on index page with owned secret' do
+        create(:secret, :author => @u)
+        visit root_path
+        expect(page).to have_link('Destroy') 
+      end
+
+      scenario 'clicking destroy should delete the secret' do
+        create(:secret, :author => @u)
+        visit root_path
+        expect{click_link('Destroy')}.to change(Secret, :count).by(-1)
+        expect(page).to_not have_link('Destroy') 
+      end
+
     end
 
   end
