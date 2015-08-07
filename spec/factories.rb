@@ -7,12 +7,7 @@ FactoryGirl.define do
 
   factory :secret do
 
-    # trait :author do
-    #   after(:create) do |secret|
-    #     secret.author_id = create(:user)
-    #   end
-    # end
-    title     "secret"
+    title     "Last summer"
     body      "liufrifuhriuofheuiohei qweiofuq iou"
     author 
   end
