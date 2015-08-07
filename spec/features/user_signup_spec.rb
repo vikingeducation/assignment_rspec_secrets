@@ -22,4 +22,6 @@ feature 'sign up new user' do
     expect(page).to have_content("Welcome, #{name}")
     expect(page).to have_content("User was successfully created.")
   end
+
+  scenario 'should be able to sign up as new user'
 end
