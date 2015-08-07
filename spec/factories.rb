@@ -6,7 +6,7 @@ FactoryGirl.define do
   # is the same as the symbol you passed
   # (so here, it assumes this is a User)
   factory :user, :aliases => [:author] do
-    name  "Foo"
+    sequence(:name)  {|n| "Foo#{n}" }
     sequence(:email)  {|n| "foo#{n}@bar.com" }
     password "foobar"
     password_confirmation "foobar"

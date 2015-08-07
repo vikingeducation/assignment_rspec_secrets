@@ -56,7 +56,7 @@ feature "Signing Up" do
 
 end
 
-feature "Signing in" do
+feature "Signing in and out" do
 
   let(:user) { create(:user) }
 
@@ -80,6 +80,48 @@ feature "Signing in" do
     expect(page).to have_content "Welcome, #{user.name}!"
     expect(page).to have_content "Logout"
 
+  end
+
+  scenario 'author names should not be hidden when signed in' do
+
+    sign_in(user)
+    new_secret = create(:secret)
+
+    visit current_path
+
+    expect(page).to have_content("#{new_secret.author.name}")
+    expect(page).not_to have_content "**hidden**"
+    
+  end
+
+  scenario 'user should get error when not providing the correct credentials' do
+    click_link "Login"
+
+    fill_in "Email",    with: user.email
+    fill_in "Password", with: "barfoo"
+
+    click_button "Log in"
+
+    expect(current_path).not_to eq(root_path)
+    expect(page).not_to have_content "Welcome, #{user.name}!"
+    expect(page).not_to have_content "Logout"
+  end
+
+
+  scenario 'User should see a sign out link when signed in' do
+    sign_in(user)
+
+    expect(page).to have_content "Logout"
+  end
+
+  scenario 'clicking signout should sign out the user' do
+    sign_in(user)
+
+    click_link "Logout"
+
+    expect(current_path).to eql(root_path)
+    expect(page).to have_content "Login"
+    expect(page).not_to have_content "Welcome, #{user.name}"
   end
 
 end
@@ -113,3 +155,48 @@ feature "create a secret as a signed in user" do
   end
 
 end
+
+
+feature "Editing and deleting secrets" do
+  let(:user)   {create(:user)}
+
+  before do 
+    create(:secret, author_id: user.id)
+    sign_in(user)
+  end
+
+  scenario "user should be able to edit his secrets" do
+    expect(page).to have_content 'Edit'
+
+    click_link 'Edit'
+
+    fill_in "Title", with: "Edited Title"
+    fill_in "Body",  with: "Edited Body"
+
+    expect{click_button "Update Secret"}.to change(Secret, :count).by(0)
+
+    expect(current_path).to eql(secret_path(1))
+
+    expect(page).to have_content "Edited Title"
+    expect(page).to have_content "Edited Body"
+
+  end
+
+  scenario 'user should be able to delete his secret' do
+    expect(page).to have_content 'Destroy'
+
+    
+
+    expect{click_link 'Destroy'}.to change(Secret, :count).by(-1)
+
+    expect(current_path).to eql(secrets_path)
+
+    # expect(page).to have_content "Edited Title"
+    # expect(page).to have_content "Edited Body"
+  end
+end
+
+
+
+
+
