@@ -58,6 +58,7 @@ feature 'User' do
 end
 feature 'User work with secrets' do
   let(:user){ create(:user) }
+  let(:secret) { create(:secret) }
   before do 
     visit root_path
     sign_in(user)
@@ -77,11 +78,33 @@ feature 'User work with secrets' do
 
   end
 
-  scenario "edit a secret"
+  scenario "edit a secret" do
+    secret.author_id = user.id
+    secret.save!
+    visit root_path
+    click_link "Edit"
 
-  scenario "delete a secret"
 
-  scenario "can't see others secrets"
+    expect(page).to have_content "Title"
+    expect(page).to have_content "Body"
+    expect(page).to have_button "Update Secret"
+  end 
+
+  scenario "delete a secret" do
+    secret.author_id = user.id
+    secret.save!
+    visit root_path
+    # click_link "All Secrets"
+    # save_and_open_page
+    click_link "Destroy"
+
+    expect{click_link "Destroy"}.to change(Secret, :count).by(-1)
+    # expect(page).to have_content "Listing secrets"
+    # expect(page).to have_content "Body"
+    # expect(page).to have_button "Update Secret"
+  end
+
+  scenario "can't edit others secrets"
 
   scenario "can't delete others secrets"  
 
