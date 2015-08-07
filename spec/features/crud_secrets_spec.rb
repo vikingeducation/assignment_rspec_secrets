@@ -6,7 +6,7 @@ require 'pry'
 
 feature 'Creating Secrets' do
   let(:user){ create(:user) }
-  
+
   before do
     visit root_path
   end
@@ -16,7 +16,7 @@ feature 'Creating Secrets' do
       sign_in(user)
       click_link "New Secret"
     end
-    
+
     scenario 'signed-in user can view secret builder form' do
       expect(page).to have_content("New secret")
     end
