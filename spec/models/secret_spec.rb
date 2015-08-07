@@ -1,9 +1,9 @@
 # happy
   #has a author, title and body to be valid
-  
+
   #title is valid with between 4 and 24 chars
   #tile is invalid with more than 24 chars and less than 4chars
-  
+
   #body is valid with between 4 and 140 chars
   #body is invalid with less than 4 and more than 140 chars
 
@@ -77,7 +77,7 @@ describe Secret do
 
   context "testing Secret methods" do
 
-    before(:each) do 
+    before(:each) do
         @secrets = create_list(:secret, 6)
     end
 
@@ -86,7 +86,6 @@ describe Secret do
     end
 
     specify "last_five to return last 5 secrets in list" do
-      binding.pry
       @secrets = @secrets[0..-2]
       expect(Secret.last_five).to eq(@secrets)
     end
