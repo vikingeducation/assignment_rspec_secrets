@@ -98,14 +98,10 @@ feature 'user interaction' do
   context 'as a signed in user, I can create a secret' do
 
     before do
-      @u = create(:user)
-      visit new_session_path
-      fill_in 'email', with: @u.email
-      fill_in 'password', with: @u.password
-      click_button 'Log in'
+      sign_in
       click_link 'New Secret'
     end
-  
+
     scenario 'should not be brought to login page' do
       expect(current_url).to_not eq(new_session_url)
     end
@@ -139,7 +135,7 @@ feature 'user interaction' do
       visit root_path
       click_link 'New Secret'
     end
-    
+
     scenario 'should be brought to login page' do
       expect(current_url).to eq(new_session_url)
     end
@@ -151,8 +147,72 @@ feature 'user interaction' do
   end
 
   # As a signed-in user, I want to be able to edit one of my secrets
+  context 'as a signed in user, I can edit a secret' do
+
+    before do
+      sign_in
+    end
+
+    scenario 'should be able to go to edit page for authored secret' do
+      new_secret = create(:secret, author: @u)
+      visit root_path
+      expect(page).to have_content("Edit")
+      click_link("Edit")
+      expect(current_url).to eq(edit_secret_url(new_secret))
+    end
+
+    scenario 'should not be able to go to the edit page for unowned secret' do
+      create(:secret)
+      visit root_path
+      expect(page).to_not have_content("Edit")
+    end
+
+    scenario 'should not be able to input the edit url for an unowned secret' do
+      new_secret = create(:secret)
+      visit edit_secret_url(new_secret)
+      expect(current_url).to eq(root_url)
+    end
+
+    context 'editing secrets' do
+      before do
+        new_secret = create(:secret, author: @u)
+        visit root_path
+        click_link("Edit")
+      end
+      scenario 'should be able to edit the contents of a secret' do
+        fill_in "secret_body", with: "THIS IS A TEST"
+        click_button "Update Secret"
+        expect(current_url).to eq(secret_url(Secret.first))
+        expect(page).to have_content("THIS IS A TEST")
+      end
+
+      scenario 'should not be able to edit the body with invalid parmas' do
+        invalid_body = "T" * 999
+        fill_in "secret_title", with: invalid_body
+        click_button "Update Secret"
+        expect(current_url).to eq(secret_url(Secret.first))
+        expect(page).to have_selector("input[value=#{invalid_body}]")
+        expect(page).to have_css('#error_explanation')
+      end
+
+      scenario 'should be able to edit the contents of a secret (title)' do
+        fill_in "secret_title", with: "THIS IS A TEST TITLE"
+        click_button "Update Secret"
+        expect(current_url).to eq(secret_url(Secret.first))
+        expect(page).to have_content("THIS IS A TEST TITLE")
+      end
+
+      scenario 'should not be able to edit the title with invalid parmas' do
+        fill_in "secret_title", with: "TH"
+        click_button "Update Secret"
+        expect(current_url).to eq(secret_url(Secret.first))
+        expect(page).to have_selector("input[value='TH']")
+        expect(page).to have_css('#error_explanation')
+      end
+    end
 
   end
+end
 
 
 

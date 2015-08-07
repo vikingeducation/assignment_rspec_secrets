@@ -65,7 +65,8 @@ class SecretsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_secret
-      @secret = current_user.secrets.find(params[:id])
+      @secret = current_user.secrets.find_by_id(params[:id])
+      redirect_to root_path unless @secret
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
