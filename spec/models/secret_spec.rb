@@ -96,7 +96,7 @@ describe Secret do
 
       it "should return the last five 5 secrets if more than 5 exist" do
         all_secrets = create_list(:secret, 6)
-        expect(Secret.last_five).to eq(all_secrets[1..-1].reverse)
+        expect(Secret.last_five).to eq(all_secrets[-5..-1].reverse)
       end
     end
   end
