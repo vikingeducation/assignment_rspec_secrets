@@ -28,13 +28,18 @@ gem 'spring',        group: :development
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
-
+gem 'hirb'
 group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'factory_girl_rails', '~> 4.0'
   gem 'rspec-rails'
   gem 'guard-rspec'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'launchy'
 end
 
 group :development do

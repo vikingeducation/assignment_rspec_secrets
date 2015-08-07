@@ -2,6 +2,7 @@ require 'rails_helper'
 #require './app/models/user'
 
 
+
 describe User do
   let(:user){ build(:user) }
 
@@ -51,7 +52,5 @@ describe User do
   it "responds to secrets assosciation" do
     expect(user).to respond_to(:secrets)
   end
-
-  # password confirmation
 
 end
