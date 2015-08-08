@@ -4,6 +4,10 @@ describe SecretsController do
 
   # describe 'secret instance' do
   let(:secret){create(:secret)}
+  let(:user){create(:user)}
+  before :each do
+    session[:user_id] = user.id 
+  end
 
 
     describe 'GET #show' do
@@ -13,7 +17,29 @@ describe SecretsController do
       end
     end
 
-  end
+    describe 'GET #new' do 
+      it "makes a new secret" do
+        get :new
+        expect(response).to render_template :new
+      end
+    end
+
+    describe 'POST #create' do
+      it "creates a new secret" do
+        expect{ post :create, secret: attributes_for(:secret)
+        }.to change(Secret, :count).by(1)
+      end
+    end
+
+    describe 'GET #edit' do
+      it "has secret instance" do
+        secret.author_id = user.id
+        secret.save
+        get :edit, :id => secret.id
+        expect(assigns(:secret)).to match(secret)
+      end
+    end    
+end
 
   describe UsersController do
       let(:user){create(:user)}
@@ -46,8 +72,27 @@ describe SecretsController do
 
     end
 
+    context "it destroys user if authorized" do
+      before :each do
+        session[:user_id] = user.id 
+      end
 
+      it "DELETE #destroy" do
+        expect{
+          delete :destroy, :id => user.id}
+          .to change(User,:count).by(-1)
+      end
+      
+      it "DELETE #destroy" do
+        new_user = create :user 
+        expect{
+          delete :destroy, :id => new_user.id}
+          .to change(User,:count).by(0)
+      end
+      
+    end
 
+    
 
   end
 
