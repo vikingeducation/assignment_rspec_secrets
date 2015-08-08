@@ -13,6 +13,7 @@ describe "users/index.html.erb" do
 		end
 	end
 
+	
 
 	end
 

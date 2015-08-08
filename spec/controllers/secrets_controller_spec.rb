@@ -77,11 +77,12 @@ describe SecretsController do
 
       it 'cannot be changed by a person other than owner' do
         secret2 = create(:secret)
-        expect{post :update,  id: secret2.id,
-                      secret: attributes_for(
-                              :secret,
-                              title: "new_title")}.
-        to raise_error(ActiveRecord::RecordNotFound)
+        expect do 
+          post :update, id: secret2.id,
+                        secret: attributes_for(
+                        :secret,
+                        title: "new_title")
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
 
     end
