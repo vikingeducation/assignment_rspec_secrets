@@ -1,14 +1,11 @@
 require 'rails_helper'
+require 'pry'
 
 describe UsersController do
 
   let(:user) { build(:user) }
 
   context 'RESTful user actions' do
-
-    before do
-      session[:user_id] = user.id
-    end
 
     describe "GET #new" do
 
@@ -30,10 +27,46 @@ describe UsersController do
         post :create, user: attributes_for(:user)
         expect(response).to redirect_to(user_path(assigns(:user)))
         # user.save
-        # expect(request.original_url).to eq(user_url(attributes_for(:user)))
+        # binding.pry
+        # expect(request.fullpath).to eq(user_url(assigns(:user)))
       end
 
-      specify "improper submission does not create a new user"
+      describe "improper submission does not create a new user" do 
+        specify "blank name does not create a new user" do 
+          expect{post :create, user: attributes_for(:user, :name => nil)}.
+          to change(User, :count).by(0) 
+        end
+
+        specify "blank email does not create a new user" do 
+          expect{post :create, user: attributes_for(:user, :email => nil)}.
+          to change(User, :count).by(0) 
+        end
+
+        specify "unmatched password does not create a new user" do 
+          expect{post :create, user: attributes_for(:user, 
+                                                    password: "1234", 
+                                                    password_confirmation: "12345" )}.
+          to change(User, :count).by(0) 
+        end
+      end
+    end
+
+    describe 'GET #edit' do
+
+      before do
+        user.save
+        session[:user_id] = user.id
+      end
+
+      it "works as normal" do
+        get :edit, id: user.id
+        binding.pry
+        expect(response).to render_template :edit
+      end
+
+    end
+
+    describe 'PUT #update' do
 
     end
 

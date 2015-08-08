@@ -21,7 +21,7 @@ describe SecretsController do
       it "should not set a wrong instance variable" do
         secret2 = create(:secret)
         get :show, :id => secret2.id
-        expect(assigns(:secret)).to eq(secret)
+        expect(assigns(:secret)).to_not eq(secret)
       end
 
     end
