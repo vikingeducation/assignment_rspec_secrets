@@ -16,11 +16,11 @@ feature 'Signing In/Signing Out' do
     before do
       sign_in(user)
     end
-    
+
     scenario "successfully signs in an exisiting user" do
       expect(page).to have_content "Welcome, #{user.name}"
     end
-    
+
     scenario "can view authors of secrets" do
       expect(page).to_not have_content "**hidden**"
     end
@@ -29,7 +29,7 @@ feature 'Signing In/Signing Out' do
       sign_out
       expect(page).to have_content "Login"
     end
-  
+
   end
 
   context "As a non-existing user/incorrect login" do
@@ -37,6 +37,7 @@ feature 'Signing In/Signing Out' do
       user.email = user.email + "z"
       sign_in(user)
     end
+
     scenario "does not allow sign in" do
       expect(page).to_not have_content "Welcome, #{user.name}"
     end

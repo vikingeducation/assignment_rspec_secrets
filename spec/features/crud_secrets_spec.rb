@@ -74,8 +74,6 @@ feature 'Creating Secrets' do
 
   end
 
-
-
 end
 
 

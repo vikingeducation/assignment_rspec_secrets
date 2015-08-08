@@ -21,12 +21,14 @@ feature 'Deleting Secrets' do
     end
 
     scenario 'can view Destroy button on their secret' do
-      expect(page).to have_content("secret_test")
-      expect(page).to have_content("wooooop")
+      # expect(page).to have_content("secret_test")
+      # expect(page).to have_content("wooooop")
       expect(page).to have_content("Destroy")
     end
 
     scenario 'destroy should remove secret' do
+
+      save_and_open_page
       click_link "Destroy"
       expect(page).to_not have_content("secret_test")
       expect(page).to_not have_content("wooooop")

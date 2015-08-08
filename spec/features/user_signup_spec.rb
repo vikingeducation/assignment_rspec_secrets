@@ -14,15 +14,17 @@ feature 'sign up new user' do
     click_link "All Users"
     click_link "New User"
     name = "tester"
+
     fill_in "Name", with: name
     fill_in "Email", with: "test@test.com"
     fill_in "Password", with: "password"
     fill_in "Password confirmation", with: "password"
+
     expect{click_button "Create User"}.to change(User, :count).by(1)
     expect(page).to have_content("Welcome, #{name}")
     expect(page).to have_content("User was successfully created.")
   end
 
   # scenario 'Can not sign up as new user when logged in'
-  
+
 end
