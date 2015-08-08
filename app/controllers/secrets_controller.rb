@@ -65,6 +65,10 @@ class SecretsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    # In this case, we will (intentionally) get an error if 
+    #   the secret you're trying to access doesn't belong to you
+    # In real world scenarios, we'd be more likely to set a
+    #   flash message and redirect with a proper error code here
     def set_secret
       @secret = current_user.secrets.find(params[:id])
     end
