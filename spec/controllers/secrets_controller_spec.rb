@@ -11,6 +11,25 @@ describe SecretsController do
    expect(assigns(:secret)).to eq(new_secret)
   end
 
+  it 'secrets#edit sets the right instance variable' do
+   new_user = create(:user)
+   session[:user_id] = new_user.id
+   new_secret = create(:secret, author: new_user)
+
+   get :edit, id: new_secret.id
+
+   expect(assigns(:secret)).to eq(new_secret)
+  end
+
+  it 'secrets#edit should raise error if user does not own secret' do
+   new_user = create(:user)
+   session[:user_id] = new_user.id
+   new_secret = create(:secret)
+
+   expect{get :edit, id: new_secret.id}.to raise_error(ActiveRecord::RecordNotFound)
+
+  end
+
   context 'authorized users' do
 
     let(:user){create(:user)}
