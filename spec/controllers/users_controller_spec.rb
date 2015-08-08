@@ -62,6 +62,11 @@ describe UsersController do
 
       describe 'GET #edit' do
 
+        it 'sets the right instance variable' do
+        get :edit, :id => user.id
+        expect(assigns(:user)).to eq(user)
+      end
+
         it "works as normal" do
           get :edit, id: user.id
           expect(response).to render_template :edit

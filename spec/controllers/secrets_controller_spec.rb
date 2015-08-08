@@ -28,6 +28,11 @@ describe SecretsController do
 
     describe 'GET #edit' do
 
+      it 'sets the right instance variable' do
+        get :edit, :id => secret.id
+        expect(assigns(:secret)).to eq(secret)
+      end
+
       it 'renders the right page' do
         get :edit, :id => secret.id
         expect(response).to render_template(:edit)
@@ -42,26 +47,41 @@ describe SecretsController do
 
     describe 'PUT #update' do
 
-      it 'can be changed by owner' do
-        put :update,  id: secret.id,
-                      secret: attributes_for(
-                              :secret, 
-                              title: "new_title")
-        secret.reload
-        expect(secret.title).to eq("new_title")
+      context "secret can be changed by owner" do
+
+        specify 'title can be updated' do
+          put :update,  id: secret.id,
+                        secret: attributes_for(
+                                :secret,
+                                title: "new_title")
+          secret.reload
+          expect(secret.title).to eq("new_title")
+        end
+
+        specify 'body can be updated' do
+          put :update,  id: secret.id,
+                        secret: attributes_for(
+                                :secret,
+                                body: "this is an updated body")
+          secret.reload
+          expect(secret.body).to eq("this is an updated body")
+        end
+
+        it "redirects to the updated secret" do
+          put :update,  id: secret.id,
+                        secret: attributes_for(:secret)
+          expect(response).to redirect_to(secret_path(assigns(:secret)))
+        end
+
       end
 
       it 'cannot be changed by a person other than owner' do
-        # # user2 = create(:user)
-        # secret2 = create(:secret)
-        # # binding.pry
-        # get :edit, id: secret.id
-        # # post :update,  id: secret2.id,
-        # #               secret: attributes_for(
-        # #                       :secret, 
-        # #                       title: "new_title")
-        # # secret2.reload
-        # expect(response).to redirect_to(new_session_path)
+        secret2 = create(:secret)
+        expect{post :update,  id: secret2.id,
+                      secret: attributes_for(
+                              :secret,
+                              title: "new_title")}.
+        to raise_error(ActiveRecord::RecordNotFound)
       end
 
     end
