@@ -100,7 +100,7 @@ feature 'User' do
     click_link "Edit"
     expect(page).to have_content "Password"
     fill_in "Name", with: user.name+"New"
-    save_and_open_page
+  
     click_button "Update User"
     expect(page).to have_content "User was successfully updated."
   end
