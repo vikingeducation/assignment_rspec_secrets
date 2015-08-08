@@ -21,6 +21,13 @@ describe SecretsController do
       @secret = create(:secret, author: user)
     end
 
+    it 'should be able to create a secret' do
+
+
+      expect{post :create, secret: attributes_for(:secret)}.to change(Secret, :count).by(1)
+
+    end
+
     it 'should be able to edit/update their own secret' do
       updated = "new title"
       post :update, id: @secret.id, secret: attributes_for(:secret, title: updated)
