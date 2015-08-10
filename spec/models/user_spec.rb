@@ -35,7 +35,7 @@ describe User do
 
 
   it "is valid with a 20-character name" do
-    user.name = "F2345678901234567890"
+    user.name = "F2345678901234567890" # 20 * 'a'
     expect(user).to be_valid
   end
 
