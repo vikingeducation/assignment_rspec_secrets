@@ -147,11 +147,7 @@ feature 'User making secrets' do
   let(:user) { create(:user) }
 
   before do
-    # macro!
-    visit new_session_path
-    fill_in "Email", with: user.email
-    fill_in "Password", with: user.password
-    click_button "Log in"
+    sign_in(user)
   end
 
 
@@ -174,12 +170,19 @@ feature 'User making secrets' do
   # As a signed-in user, I want to be able to edit one of my secrets
   scenario 'user can edit a secret' do
     # create secret for user
-    create(:secret, :author_id => user.id)
+    secret = create(:secret, :author_id => user.id)
     visit secrets_path
 
-    expect(page).to have_link('Edit', :href => "/secrets/#{user.id}/edit")
-    # Edit links should include user.id in the href
-    #find_link('Edit', :href => "/secrets/#{user.id}/edit" ).click
+    # Edit links should include secret.id in the href
+    expect(page).to have_link('Edit', :href => "/secrets/#{secret.id}/edit")
+
+    new_title = "New title"
+
+    find_link('Edit', :href => "/secrets/#{secret.id}/edit" ).click
+    fill_in "secret_title", with: new_title
+    click_button "Update Secret"
+
+    expect(page).to have_content(new_title)
 
   end
 
@@ -187,7 +190,16 @@ feature 'User making secrets' do
 
   # As a signed-in user, I want to be able to delete one of my secrets
   scenario 'user can delete a secret' do
+    secret = create(:secret, :author_id => user.id)
+    visit secrets_path
 
+    # Delete links should include secret.id in the href
+    expect(page).to have_link('Destroy', :href => "/secrets/#{secret.id}")
+
+    find_link('Destroy', :href => "/secrets/#{secret.id}" ).click
+
+
+    expect(page).not_to have_content(secret.title)
   end
 
 
