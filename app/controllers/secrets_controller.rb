@@ -33,6 +33,7 @@ class SecretsController < ApplicationController
         format.html { redirect_to @secret, notice: 'Secret was successfully created.' }
         format.json { render :show, status: :created, location: @secret }
       else
+        flash.now[:notice] = "Secret couldn't be created!"
         format.html { render :new }
         format.json { render json: @secret.errors, status: :unprocessable_entity }
       end
