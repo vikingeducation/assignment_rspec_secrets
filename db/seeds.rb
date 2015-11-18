@@ -6,14 +6,17 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Secret.delete_all
-User.delete_all
+puts 'Destroying old data'
+if ['development', 'test'].include?(Rails.env)
+  Rake::Task['db:migrate:reset'].invoke
+end
 
+puts 'Creating users'
 10.times do |i|
   User.create!( :name => "foo#{i}", 
                 :email => "foo#{i}@bar.com", 
-                :password => "foobar", 
-                :password_confirmation => "foobar" )
+                :password => "password", 
+                :password_confirmation => "password" )
 end
 
 users = User.all
@@ -22,3 +25,5 @@ users = User.all
                   :body => "You won't believe what #{users.sample.name} did!",
                   :author => users.sample)
 end
+
+puts 'done!'
