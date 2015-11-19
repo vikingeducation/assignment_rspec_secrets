@@ -2,6 +2,9 @@ require 'rails_helper'
 
 describe User do
 
+  # --------------------------------------------
+  # Initialization
+  # --------------------------------------------
   describe '#initialize' do
     it 'should return an instance of the User class' do
       user = build(:user)
@@ -9,6 +12,9 @@ describe User do
     end
   end
 
+  # --------------------------------------------
+  # Validations
+  # --------------------------------------------
   describe 'validations of' do
     let(:user){build(:user)}
 
@@ -71,6 +77,9 @@ describe User do
     end
   end
 
+  # --------------------------------------------
+  # Associations
+  # --------------------------------------------
   describe 'association with' do
     let(:user){create(:user)}
 

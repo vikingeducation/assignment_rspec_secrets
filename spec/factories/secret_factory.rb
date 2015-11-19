@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :secret do
-    title 'Muahahahahaha'
+    sequence(:title) {|n| "Secret - #{n}"}
     body 'I know what you did last summer!'
     author
   end

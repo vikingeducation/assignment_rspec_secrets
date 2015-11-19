@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+    @current_user ||= User.find(session[:user_id]) if User.exists?(session[:user_id]) && session[:user_id]
   end
   helper_method :current_user
 
@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
     # don't forget that params is a string!!!
     unless params[:id] == current_user.id.to_s
       flash[:error] = "You're not authorized to view this"
-      redirect_to root_url
+      redirect_to request.referer
     end
   end 
 end

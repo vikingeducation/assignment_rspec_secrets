@@ -5,7 +5,7 @@ class SecretsController < ApplicationController
   # GET /secrets
   # GET /secrets.json
   def index
-    @secrets = Secret.last_five
+    @secrets = Secret.all
   end
 
   # GET /secrets/1
@@ -56,10 +56,13 @@ class SecretsController < ApplicationController
   # DELETE /secrets/1
   # DELETE /secrets/1.json
   def destroy
-    @secret.destroy
     respond_to do |format|
-      format.html { redirect_to secrets_url, notice: 'Secret was successfully destroyed.' }
-      format.json { head :no_content }
+      if @secret.destroy
+        format.html { redirect_to secrets_url, notice: 'Secret was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html {render :index}
+      end
     end
   end
 
@@ -70,7 +73,11 @@ class SecretsController < ApplicationController
     # In real world scenarios, we'd be more likely to set a
     #   flash message and redirect with a proper error code here
     def set_secret
-      @secret = current_user.secrets.find(params[:id])
+      if current_user.secrets.exists?(params[:id])
+        @secret = current_user.secrets.find(params[:id])
+      else
+        redirect_to secrets_path, :flash => {:error => 'Secret does not exist or is not accessible!'}
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 describe Secret do
+
+  # --------------------------------------------
+  # Initialization
+  # --------------------------------------------
   describe '#initialize' do
     it 'should return an instance of the Secret class' do
       secret = build(:secret)
@@ -8,6 +12,9 @@ describe Secret do
     end
   end
 
+  # --------------------------------------------
+  # Validations
+  # --------------------------------------------
   describe 'validations of' do
     let(:secret){build(:secret)}
 
@@ -73,6 +80,9 @@ describe Secret do
     end
   end
 
+  # --------------------------------------------
+  # Associations
+  # --------------------------------------------
   describe 'association with' do
     let(:user){create(:user)}
     let(:secret){create(:secret, :author => user)}
@@ -84,6 +94,9 @@ describe Secret do
     end
   end
 
+  # --------------------------------------------
+  # Class Methods
+  # --------------------------------------------
   describe 'class methods' do
     let!(:user){create(:user)}
     let!(:secrets) do

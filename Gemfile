@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+# ----------------------------
+# My Gems
+# ----------------------------
 group :development, :test do
   gem 'hirb'
   gem 'rspec-rails'
@@ -7,6 +10,9 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'selenium-webdriver'
 end
 
 
