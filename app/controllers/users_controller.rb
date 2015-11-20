@@ -59,6 +59,7 @@ class UsersController < ApplicationController
   def destroy
     respond_to do |format|
       if @user.destroy
+        sign_out
         format.html { redirect_to new_session_path, notice: 'User was successfully destroyed.' }
         format.json { head :no_content }
       else
@@ -82,3 +83,6 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
 end
+
+
+

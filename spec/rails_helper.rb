@@ -41,10 +41,13 @@ RSpec.configure do |config|
   # My Config
   # ------------------------------------
   config.include FactoryGirl::Syntax::Methods
+
   config.include Macros::Global
   config.include Macros::Flash
   config.include Macros::User
   config.include Macros::Secret
+
+  config.include ControllerHelper
 
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

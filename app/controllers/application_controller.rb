@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
     # don't forget that params is a string!!!
     unless params[:id] == current_user.id.to_s
       flash[:error] = "You're not authorized to view this"
-      redirect_to request.referer
+      redirect_to request.referer ? request.referer : root_path
     end
   end 
 end
