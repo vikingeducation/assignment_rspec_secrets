@@ -64,4 +64,16 @@ RSpec.describe Secret, :type => :model do
       expect(secret).to be_valid
     end
   end
+
+  context 'class methods' do
+
+    it 'responds to the last_five method' do
+      expect(Secret).to respond_to(:last_five)
+    end
+
+    it 'only returns 5 secrets when calling the last_five method' do
+      create_list(:secret, 25)
+      expect(Secret.last_five.count).to eq(5)
+    end
+  end
 end
