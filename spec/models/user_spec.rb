@@ -51,4 +51,11 @@ RSpec.describe User, :type => :model do
       end
     end
   end
+
+  context 'associations' do
+
+    it 'responds to the secrets association' do
+      expect(user).to respond_to(:secrets)
+    end
+  end
 end

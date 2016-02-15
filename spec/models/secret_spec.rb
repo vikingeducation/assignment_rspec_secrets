@@ -45,4 +45,11 @@ RSpec.describe Secret, :type => :model do
       expect(secret).to_not be_valid
     end
   end
+
+  context 'associations' do
+
+    it 'responds to the author association' do
+      expect(secret).to respond_to(:author)
+    end
+  end
 end
