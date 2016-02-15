@@ -4,7 +4,7 @@ RSpec.describe User, :type => :model do
 
   let(:user){ build(:user) }
 
-  context "User validations" do
+  context "validations" do
 
     it 'is valid with a name, email, and password' do
       expect(user).to be_valid
