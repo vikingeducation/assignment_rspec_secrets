@@ -40,6 +40,16 @@ RSpec.describe User, :type => :model do
       expect(user).not_to be_valid
     end
 
+    it 'is invalid when password confirmation does not match' do
+      user = build(:user, password_confirmation: "not the other one")
+      expect(user).not_to be_valid
+    end
+
+    it 'is valid when password and confirmation match' do
+      user = build(:user, password_confirmation: "password", password: "password")
+      expect(user).to be_valid
+    end
+
     context "when saving multiple users" do
       before do
         user.save!

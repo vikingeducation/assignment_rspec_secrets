@@ -44,12 +44,24 @@ RSpec.describe Secret, :type => :model do
       secret = build(:secret, body: ("x" * 141))
       expect(secret).to_not be_valid
     end
+
   end
 
   context 'associations' do
 
     it 'responds to the author association' do
       expect(secret).to respond_to(:author)
+    end
+
+    it 'is invalid with an invalid author' do
+      secret.author_id = 12345
+      expect(secret).to_not be_valid
+    end
+
+    it 'is valid with a valid author' do
+      author = create(:user)
+      secret.author = author
+      expect(secret).to be_valid
     end
   end
 end
