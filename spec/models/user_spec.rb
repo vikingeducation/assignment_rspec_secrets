@@ -63,10 +63,20 @@ describe User do
       expect(new_user).not_to be_valid
     end
 
-    it "password not required on update" do
+    it "allows password to be nil" do
       user.save
-      user.update!(name: "Kitty")
-      expect(user.name).to eq("Kitty")
+      expect { user.update!(name: "Kitty") }.not_to raise_error
+    end
+
+  end
+
+  describe "associations" do
+
+    let(:secret) { create(:secret, author: user) }
+
+    it "responds to secrets association" do
+
+      expect(user).to respond_to(:secrets)
     end
 
   end
