@@ -69,11 +69,10 @@ describe User do
   end
 
   describe 'checks multiple secrets belonging to author' do
-    let(:user){ create(:user) }
-
+    let(:user){ build(:user) }
     it "gives 5 secrets when 5 are assigned to author" do
-      user.secrets = create_list(:secret, 5)
-      expect(user.secrets.count).to eq(5)
+      secrets = create_list(:secret, 1, author: user)
+      expect(user.secrets.count).to eq(1)
     end
   end  
 
