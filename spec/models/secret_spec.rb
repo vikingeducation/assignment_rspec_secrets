@@ -9,8 +9,7 @@ describe Secret do
   # calling `build` using `FactoryGirl.build`
 
   let(:our_secret){ build(:secret) }
-  let(:secret_without_title){ build(:secret_wo_title) }
-  let(:secret_without_body){ build(:secret_wo_body) }
+
 
   it "is valid with default attributes" do
     expect(our_secret).to be_valid
@@ -28,14 +27,21 @@ describe Secret do
     expect(our_secret.body.length).to be_within(68.1).of(72.0)
   end
 
+
+  it "title of length 3 is invalid" do
+    expect { create(:secret, title: "123") }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
+
   it "is not valid without title" do
-    expect(secret_without_title).to_not be_valid
+    expect { create(:secret, title: nil) }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "is not valid without body" do
-    expect(secret_without_body).to_not be_valid
+    expect { create(:secret, body: nil) }.to raise_error(ActiveRecord::RecordInvalid)
   end
 end
+
 
 describe "last five" do
   let(:secrets)  do
