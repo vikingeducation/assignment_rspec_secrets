@@ -72,10 +72,7 @@ describe User do
 
   describe "associations" do
 
-    let(:secret) { create(:secret, author: user) }
-
     it "responds to secrets association" do
-
       expect(user).to respond_to(:secrets)
     end
 
