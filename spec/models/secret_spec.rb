@@ -68,6 +68,23 @@ describe Secret do
     it 'responds to author' do
       expect(secret).to respond_to(:author)
     end
+
+    it 'can set its author to a valid author' do
+      secret.author = user
+      expect(secret.author).to eq(user)
+    end
+  end
+
+  describe 'last_five' do
+
+    let(:five_secrets) { create_list(:secret, 5) }
+
+    it 'gets the last 5 secrets' do
+      Secret.last_five.each do |secret|
+        expect(five_secrets.include?(secret)).to eq(true)
+      end
+    end
+
   end
 
 end
