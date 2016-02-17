@@ -44,4 +44,11 @@ describe Secret do
     end
   end
 
+  describe '#last_five' do
+    it "returns 5 orders" do
+      secrets = create_list(:secret, 10, author: user)
+      expect(Secret.last_five).to eq(secrets.last(5).reverse)
+    end
+  end
+
 end

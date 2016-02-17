@@ -76,6 +76,7 @@ describe User do
     end
   end  
 
+
   describe 'checks that multiple users can be created' do
     it "gives 10 users" do
       users = create_list(:user, 10)
