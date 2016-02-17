@@ -50,7 +50,8 @@ describe User do
 
     context "a user is already saved" do
       before do
-        user.save!
+        test_user = build(:user, email: 'foo@bar.com')
+        test_user.save!
       end
 
       it 'is invalid with an email which is already taken' do
