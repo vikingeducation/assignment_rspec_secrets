@@ -8,8 +8,8 @@ FactoryGirl.define do
   end
 
   factory :secret do
-    title "title"
-    body "this is a body sentence"
+    sequence(:title){ |n| "Title#{n}" }
+    body { "this is a body sentence #{title}" }
     author
   end
 

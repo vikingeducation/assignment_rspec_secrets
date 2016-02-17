@@ -70,9 +70,20 @@ describe Secret do
   end
 
   describe "#last_five" do
-    it "returns last five secrets in database" do
+
+    it "returns five secrets" do
+      10.times { create(:secret, author: user) }
+      expect(Secret.last_five.size).to eq(5)
     end
 
-    it ""
+    it "returns 0 if there are no secrets" do
+      expect(Secret.last_five.size).to eq(0)
+    end
+
+    it "returns the last five created secrets" do
+      10.times { create(:secret, author: user) }
+      expect(Secret.last_five.first.id - Secret.last_five.last.id).to eq(4)
+    end
+
   end
 end
