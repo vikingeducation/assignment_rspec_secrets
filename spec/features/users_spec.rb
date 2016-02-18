@@ -48,13 +48,8 @@ end
 
 feature "Sign Up" do
 
-  before do
-    visit(root_path)
-    find_link('All Users').click
-    find_link('New User').click
-  end
-
   scenario "User is on new user page" do
+    sign_up
     expect(current_path).to eq(new_user_path)
   end
 
@@ -114,6 +109,44 @@ feature "Sign Up" do
   end
 
   context "user already signed in can't sign up" do
+    scenario "user can't sign in twice" do
+      sign_up
+      visit(new_user_path)
+    end
+  end
+end
 
+feature "User Sign In" do
+  before do
+    sign_up
+    click_button('Create User')
+    log_out
+    visit(new_session_path)
+  end
+
+  scenario "Existing user can sign in" do
+    log_in
+    click_button('Log in')
+    expect(page).to have_content("Welcome, Foo!")
+  end
+
+  scenario 'Redirects to root url after sign in' do
+    log_in
+    click_button('Log in')
+    expect(current_path).to eq(root_path)
+  end
+
+  context "Signing in with invalid information" do
+    scenario "Blank log in form" do
+      log_in(nil, nil)
+      click_button('Log in')
+      expect(current_path).to eq(session_path)
+    end
+
+    scenario 'Signing in as nonexistent user' do
+      log_in('wrongemail@bar.com', 'wrongpassword')
+      click_button('Log in')
+      expect(current_path).to eq(session_path)
+    end
   end
 end
