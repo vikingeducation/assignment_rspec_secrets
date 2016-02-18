@@ -1,34 +1,33 @@
 FactoryGirl.define do
 
-  factory :user, aliases: [:author] do
-    name "Username"
-    sequence(:email) { |n| "foo#{n}@bar.com"}
+
+  factory :user, :aliases => [:author] do
+    #name  "FooBar"
+    sequence(:name){ |n| "Foo#{n}"}
+    email { "#{name}@bar.com" }
     password "foobar"
+
+    #sequence(:email){ |n| "#{n}@aol.com"}
+
   end
 
-  factory :duplicate_email, class: :user do
-    name "Username"
-    email "foo1@bar.com"
-    password "foobar"
+  factory :user_with_no_password, :class => :user do
+    name  "No Password"
+    email "nopasword@aol.com"
   end
-
-
-
 
   factory :secret do
-    title "Secret title"
-    body "Secret body"
+    title "Title Secret"
+    body  "This is the body of the secret."
+    author
 
-    author        # will call factory method above
-                    #doesn't have to be build
-  end
+    # sequence an attribute to uptick with each
+    # new build of the user
+    #sequence(:title){ |n| "#{n}"}
+    #sequence(:body){ |n| "10*#{n}"}
 
-
-  factory :multiple_secrets, class: :secret do
-    sequence(:title) { |n| "Secret title#{n}" }
-    sequence(:body) { |n| "Secret body#{n} lorem ipsum" }
-    
-    author  
   end
 
 end
+
+  
