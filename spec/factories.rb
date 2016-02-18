@@ -3,7 +3,7 @@ FactoryGirl.define do
 
   factory :user, aliases: [:author] do
     name "foobar"
-    email "#{name}@example.com"
+    email {"#{name}@example.com"}
     #sequence(:email) { |n| "#{name}@example.com"}
     password "qwerqwer"
 
