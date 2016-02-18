@@ -114,7 +114,7 @@ feature 'Visit_Root_Page' do
       visit secrets_path
     end
 
-    scenario "hides author for secret" do
+    scenario "hides secrets authors for anonymous users" do
       expect(page).to have_content('**hidden**')
     end  
 
