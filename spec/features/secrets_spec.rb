@@ -1,4 +1,4 @@
-
+require 'rails_helper'
 feature 'Visit_Root_Page' do
   
   let(:user){ create(:user) }
@@ -22,7 +22,6 @@ feature 'Visit_Root_Page' do
     end
 
     scenario "shows the secrets index page" do
-      save_and_open_page
       expect(page).to have_css('.secret_row', count: 5)
     end  
 
