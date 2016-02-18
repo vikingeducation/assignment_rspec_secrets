@@ -39,4 +39,93 @@ feature "View Secrets" do
 
     expect(page).to have_content(body)
   end
+
+  scenario "visitor sees hidden author" do
+    visit(secrets_path)
+    expect(page).to have_content("**hidden**")
+  end
+end
+
+feature "Sign Up" do
+
+  before do
+    visit(root_path)
+    find_link('All Users').click
+    find_link('New User').click
+  end
+
+  scenario "User is on new user page" do
+    expect(current_path).to eq(new_user_path)
+  end
+
+  context 'User signed in' do
+    before do
+      fill_in 'Name', with: 'Foo'
+      fill_in 'Email', with: 'foo@bar.com'
+      fill_in 'Password', with: 'foobar'
+      fill_in 'Password confirmation', with: 'foobar'
+    end
+
+    scenario "new user can sign up" do
+      expect{ click_button('Create User') }.to change(User, :count).by(1)
+    end
+
+    scenario "Redirects to new user's page" do
+      click_button('Create User')
+      user = User.find_by_email('foo@bar.com')
+      expect(current_path).to eq(user_path(user))
+    end
+
+    scenario "Page has user's email" do
+      click_button('Create User')
+      expect(page).to have_content('foo@bar.com')
+    end
+  end
+
+  context "User has invalid information" do
+    scenario "User can't sign up without name" do
+      fill_in 'Email', with: 'foo@bar.com'
+      fill_in 'Password', with: 'foobar'
+      fill_in 'Password confirmation', with: 'foobar'
+      expect{ click_button('Create User') }.to change(User, :count).by(0)
+    end
+
+    scenario "User can't sign up without email" do
+      fill_in 'Name', with: 'Foo'
+      fill_in 'Password', with: 'foobar'
+      fill_in 'Password confirmation', with: 'foobar'
+      expect{ click_button('Create User') }.to change(User, :count).by(0)
+    end
+
+    scenario "User can't sign up without password" do
+      fill_in 'Email', with: 'foo@bar.com'
+      fill_in 'Name', with: 'Foo'
+      fill_in 'Password confirmation', with: 'foobar'
+      expect{ click_button('Create User') }.to change(User, :count).by(0)
+    end
+
+    scenario "User can't sign up without password confirmation" do
+      fill_in 'Email', with: 'foo@bar.com'
+      fill_in 'Password', with: 'foobar'
+      fill_in 'Name', with: 'Foo'
+      expect{ click_button('Create User') }.to change(User, :count).by(0)
+    end
+
+    scenario "User can't sign up with mismatched passwords" do
+      fill_in 'Name', with: 'Foo'
+      fill_in 'Email', with: 'foo@bar.com'
+      fill_in 'Password', with: 'foobar'
+      fill_in 'Password confirmation', with: 'barfoo'
+      expect{ click_button('Create User') }.to change(User, :count).by(0)
+    end
+
+    scenario 'Invalid signup rerenders new user page' do
+      fill_in 'Name', with: 'Foo'
+      fill_in 'Email', with: 'foo@bar.com'
+      fill_in 'Password', with: 'foobar'
+      fill_in 'Password confirmation', with: 'barfoo'
+      click_button('Create User')
+      expect(current_path).to eq(new_user_path)
+    end
+  end
 end
