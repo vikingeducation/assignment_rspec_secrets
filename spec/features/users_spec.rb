@@ -60,10 +60,7 @@ feature "Sign Up" do
 
   context 'User signed in' do
     before do
-      fill_in 'Name', with: 'Foo'
-      fill_in 'Email', with: 'foo@bar.com'
-      fill_in 'Password', with: 'foobar'
-      fill_in 'Password confirmation', with: 'foobar'
+      sign_up
     end
 
     scenario "new user can sign up" do
@@ -84,48 +81,39 @@ feature "Sign Up" do
 
   context "User has invalid information" do
     scenario "User can't sign up without name" do
-      fill_in 'Email', with: 'foo@bar.com'
-      fill_in 'Password', with: 'foobar'
-      fill_in 'Password confirmation', with: 'foobar'
+      sign_up(nil, 'foo@bar.com', 'foobar', 'foobar')
       expect{ click_button('Create User') }.to change(User, :count).by(0)
     end
 
     scenario "User can't sign up without email" do
-      fill_in 'Name', with: 'Foo'
-      fill_in 'Password', with: 'foobar'
-      fill_in 'Password confirmation', with: 'foobar'
+      sign_up('Foo', nil, 'foobar', 'foobar')
       expect{ click_button('Create User') }.to change(User, :count).by(0)
     end
 
     scenario "User can't sign up without password" do
-      fill_in 'Email', with: 'foo@bar.com'
-      fill_in 'Name', with: 'Foo'
-      fill_in 'Password confirmation', with: 'foobar'
+      sign_up('Foo', 'foo@bar.com', nil, 'foobar')
       expect{ click_button('Create User') }.to change(User, :count).by(0)
     end
 
     scenario "User can't sign up without password confirmation" do
-      fill_in 'Email', with: 'foo@bar.com'
-      fill_in 'Password', with: 'foobar'
-      fill_in 'Name', with: 'Foo'
+      sign_up('Foo', 'foo@bar.com', 'foobar', nil )
       expect{ click_button('Create User') }.to change(User, :count).by(0)
     end
 
     scenario "User can't sign up with mismatched passwords" do
-      fill_in 'Name', with: 'Foo'
-      fill_in 'Email', with: 'foo@bar.com'
-      fill_in 'Password', with: 'foobar'
-      fill_in 'Password confirmation', with: 'barfoo'
+      sign_up('Foo', 'foo@bar.com', 'foobar', 'barfoo' )
       expect{ click_button('Create User') }.to change(User, :count).by(0)
     end
 
     scenario 'Invalid signup rerenders new user page' do
-      fill_in 'Name', with: 'Foo'
-      fill_in 'Email', with: 'foo@bar.com'
-      fill_in 'Password', with: 'foobar'
-      fill_in 'Password confirmation', with: 'barfoo'
+      # save_and_open_page
+      sign_up('Foo', 'foo@bar.com', 'foobar', 'barfoo' )
       click_button('Create User')
-      expect(current_path).to eq(new_user_path)
+      expect(current_path).to eq(users_path)
     end
+  end
+
+  context "user already signed in can't sign up" do
+
   end
 end
