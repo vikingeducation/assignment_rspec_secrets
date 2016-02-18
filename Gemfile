@@ -35,7 +35,6 @@ gem 'bcrypt', '~> 3.1.7'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'guard-rspec', require: false
 end
 
 group :development, :test do
@@ -43,6 +42,9 @@ group :development, :test do
   gem 'factory_girl_rails', '~> 4.0'
   gem 'capybara'
   gem 'launchy'
+  gem 'selenium-webdriver'
+  gem 'guard-rspec', require: false
+  gem 'database_cleaner'
 end
 
 # Use unicorn as the app server

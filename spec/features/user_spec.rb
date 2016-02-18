@@ -8,7 +8,21 @@ feature 'Authentication' do
 
 
   before do
-    visit new_session_path
+    visit root_path
+  end
+
+  scenario "as visitor can sign up and logs them in" do
+    click_on('All Users')
+    click_on('New User')
+    fill_in('Name', with: 'Harry')
+    fill_in('Email', with: 'harry@potter.com')
+    fill_in('Password', with: 'qwerqwer')
+    fill_in('Password confirmation', with: 'qwerqwer')
+    click_on('Create User')
+    expect(page).to have_content 'User was successfully created.'
+    expect(page).to have_content 'harry'
+    expect(page).to have_content 'harry@potter.com'
+    expect(page).to have_content 'Logout'
   end
 
   context "with improper credentials" do
@@ -70,6 +84,31 @@ feature 'Authentication' do
         click_on('Back')
         expect(page).to have_content 'Secret T'
         expect(page).to have_content 'Secret B'
+      end
+
+      scenario 'clicking edit shows edit forms' do
+        click_on('Edit')
+        expect(find_field('Title').value).to eq('Secret T')
+        expect(find_field('Body').value).to eq('Secret B')
+        expect(page).to have_content 'Editing secret'
+      end
+
+      scenario 'submitting user edit works' do
+        click_on('Edit')
+        fill_in('Title', with: 'UPDATE CHECK')
+        fill_in('Body', with: 'HELLO')
+        click_on('Update Secret')
+        expect(page).to have_content 'Secret was successfully updated.'
+        expect(page).to have_content 'UPDATE CHECK'
+        expect(page).to have_content 'HELLO'
+      end
+
+      scenario 'deleting users secret works', js: true do
+        click_on('Back')
+        click_on('Destroy')
+        page.driver.browser.switch_to.alert.accept
+        expect(page).to_not have_content 'Secret T'
+        expect(page).to_not have_content 'Secret B'
       end
     end
 
