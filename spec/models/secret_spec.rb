@@ -19,9 +19,15 @@ describe Secret do
     expect(our_secret.author).to be_instance_of( User )
   end
 
+  # only testing the length of our factory title as-is
   it "secret title exists with proper length" do
     expect(our_secret.title.length).to be_within(10.1).of(14.0)
   end
+
+  it "secret title exists with proper length" do
+    expect(build(:secret, title: "1234")).to be_valid
+  end
+
 
   it "secret body exists with proper length" do
     expect(our_secret.body.length).to be_within(68.1).of(72.0)
