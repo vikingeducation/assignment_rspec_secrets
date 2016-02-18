@@ -252,21 +252,28 @@ feature 'Delete Secret' do
   let(:new_user){ create(:user) }
   let(:new_secret){ create(:secret, title: "New User's Secret", author: new_user) }
 
-  before do
-    sign_up
-    click_button('Create User')
-    click_link('All Secrets')
-    click_link('New Secret')
-    fill_in_secret_form
-    click_button('Create Secret')
-    visit(secrets_path)
-  end
-
   context 'User who posted secret signed in' do
+    before do
+      sign_up
+      click_button('Create User')
+      click_link('All Secrets')
+      click_link('New Secret')
+      fill_in_secret_form
+      click_button('Create Secret')
+      visit(secrets_path)
+    end
+
     scenario 'User can delete their own secret' do
       secret = Secret.find_by_title("Foo Title")
-      
+
       expect{ click_link('Destroy') }.to change{ Secret.count }.by(-1)
+    end
+  end
+
+  context 'Trying to delete other users secrets' do
+    scenario 'User cannot delete other users\' secrets' do
+      visit(root_path)
+      expect(page).not_to have_content("Destroy")
     end
   end
 
