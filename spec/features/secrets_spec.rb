@@ -2,8 +2,8 @@ require 'rails_helper'
 
 feature 'Visit_Root_Page' do
   
-  let(:user){ create(:user) }
 
+  let(:user){ create(:user) }
   let(:secrets){create_list(:secret, 5, author: user)}
 
   context "visit root page as anonymus user" do
@@ -119,7 +119,7 @@ feature 'Visit_Root_Page' do
     end  
 
     scenario "shows one row for each secret" do
-      expect(page).to have_content('**hidden**', count: 5)
+      expect(page).to have_content('**hidden**', count: 5 )
     end  
 
     scenario "show secrets authors for logged in user" do
@@ -127,10 +127,42 @@ feature 'Visit_Root_Page' do
       visit root_path
       expect(page).to_not have_content('**hidden**')
     end  
+  end
 
+  context "secrets validations work" do
+
+    before do
+      secrets
+      visit secrets_path
+      create_user_deepa
+      visit root_path
+    end
+
+    scenario "makes secret for title and body within validations" do
+      click_link 'New Secret'
+      fill_in 'Title', with: 'this'
+      fill_in 'Body', with: 'this'
+      click_button 'Create Secret'
+      expect(page).to have_content('Secret was successfully created.' )
+    end  
+
+    scenario "fails to create secret for  short title" do
+      click_link 'New Secret'
+      fill_in 'Title', with: 'art'
+      fill_in 'Body', with: 'this'
+      click_button 'Create Secret'
+      expect(page).to_not have_content('Secret was successfully created.' )
+    end  
+
+    scenario "fails to create secret for short body" do
+      click_link 'New Secret'
+      fill_in 'Title', with: 'this'
+      fill_in 'Body', with: 'art'
+      click_button 'Create Secret'
+      expect(page).to_not have_content('Secret was successfully created.' )
+    end  
 
   end
 
 
- 
 end

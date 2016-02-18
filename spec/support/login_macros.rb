@@ -9,8 +9,8 @@ module LoginMacros
       fill_in('Password', with: 'foobar')
       fill_in('Password confirmation', with: 'foobar')
       click_button('Create User')
-      click_link "All Secrets"
-      click_link "New Secret"
+      # click_link "All Secrets"
+      # click_link "New Secret"
   end
 
   def sign_in_deepa
