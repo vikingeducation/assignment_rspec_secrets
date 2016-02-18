@@ -67,51 +67,24 @@ feature 'Visit_Root_Page' do
 
     before do
       secrets
-      visit root_path
+      create_user_deepa
+      click_link "All Secrets"
+      click_link "New Secret"
     end
 
     scenario "signed up user can go to new secret page" do
-      click_link "All Users" 
-      click_link "New User" 
-      fill_in('Name', with: 'deepa')
-      fill_in('Email', with: 'deepa@x.com')
-      fill_in('Password', with: 'foobar')
-      fill_in('Password confirmation', with: 'foobar')
-      click_button('Create User')
-      click_link "All Secrets"
-      click_link "New Secret"
       expect(current_path).to eq(new_secret_path)
-      #expect(page).to have_css('.user-row', count: 2)
     end  
 
     scenario "signed up user can add a new secret" do
-      click_link "All Users" 
-      click_link "New User" 
-      fill_in('Name', with: 'deepa')
-      fill_in('Email', with: 'deepa@x.com')
-      fill_in('Password', with: 'foobar')
-      fill_in('Password confirmation', with: 'foobar')
-      click_button('Create User')
-      click_link "All Secrets"
-      click_link "New Secret"
       expect(current_path).to eq(new_secret_path)
       fill_in('Title', with: 'My Secret')
       fill_in('Body', with: 'Very Secret')
       click_button('Create Secret')
-      #expect(page).to have_css('.user-row', count: 2)
       expect(page).to have_content "Very Secret"
     end  
 
     scenario "signed up user can edit a secret" do
-      click_link "All Users" 
-      click_link "New User" 
-      fill_in('Name', with: 'deepa')
-      fill_in('Email', with: 'deepa@x.com')
-      fill_in('Password', with: 'foobar')
-      fill_in('Password confirmation', with: 'foobar')
-      click_button('Create User')
-      click_link "All Secrets"
-      click_link "New Secret"
       expect(current_path).to eq(new_secret_path)
       fill_in('Title', with: 'My Secret')
       fill_in('Body', with: 'Very Secret')
@@ -123,15 +96,6 @@ feature 'Visit_Root_Page' do
     end  
 
     scenario "signed up user can destroy a secret" do
-      click_link "All Users" 
-      click_link "New User" 
-      fill_in('Name', with: 'deepa')
-      fill_in('Email', with: 'deepa@x.com')
-      fill_in('Password', with: 'foobar')
-      fill_in('Password confirmation', with: 'foobar')
-      click_button('Create User')
-      click_link "All Secrets"
-      click_link "New Secret"
       expect(current_path).to eq(new_secret_path)
       fill_in('Title', with: 'My Secret')
       fill_in('Body', with: 'Very Secret')
@@ -143,22 +107,30 @@ feature 'Visit_Root_Page' do
 
   end
 
-  # context "with proper credentials" do
-  #   before do
-  #     sign_in(user)
-  #   end
-  #   scenario "successfully signs in an existing user" do
-  #     # verify we're on the user's show page now
-  #     expect(page).to have_content "You've successfully signed in"
-  #   end
+  context "sign_in / sign_out toggles secrets authors" do
 
-  #   context "after signing out" do
-  #     before do
-  #       sign_out
-  #     end
-  #     scenario "signs out the user" do
-  #       expect(page).to have_content "You've successfully signed out"
-  #     end
-  #   end
-  # end
+    before do
+      secrets
+      visit secrets_path
+    end
+
+    scenario "hides author for secret" do
+      expect(page).to have_content('**hidden**')
+    end  
+
+    scenario "shows one row for each secret" do
+      expect(page).to have_content('**hidden**', count: 5)
+    end  
+
+    scenario "show secrets authors for logged in user" do
+      create_user_deepa
+      visit root_path
+      expect(page).to_not have_content('**hidden**')
+    end  
+
+
+  end
+
+
+ 
 end
