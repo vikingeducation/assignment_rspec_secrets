@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 feature 'Visit_Root_Page' do
   
   let(:user){ create(:user) }
@@ -21,9 +22,45 @@ feature 'Visit_Root_Page' do
       expect(page).to have_content "Listing secrets"
     end
 
-    scenario "shows the secrets index page" do
-      expect(page).to have_css('.secret_row', count: 5)
+    scenario "shows one row for each secret" do
+      expect(page).to have_css('.secret-row', count: 5)
     end  
+
+    scenario "login redirects to correct url" do
+      click_link "Login"
+      expect(current_path).to eq(new_session_path)
+    end  
+
+    scenario "shows users correctly" do
+      click_link "All Users"
+      expect(page).to have_css('.user-row', count: 1)
+    end  
+
+    scenario "can add user happy path" do
+      click_link "All Users" 
+      click_link "New User" 
+      fill_in('Name', with: 'deepa')
+      fill_in('Email', with: 'deepa@x.com')
+      fill_in('Password', with: 'foobar')
+      fill_in('Password confirmation', with: 'foobar')
+      click_button('Create User')
+      click_link "All Users"
+      expect(page).to have_css('.user-row', count: 2)
+    end  
+
+
+    scenario "cannot add user wo password confirmation" do
+      click_link "All Users" 
+      click_link "New User" 
+      fill_in('Name', with: 'koz')
+      fill_in('Email', with: 'koz@x.com')
+      fill_in('Password', with: 'foobar')
+      fill_in('Password confirmation', with: 'otherpassword')
+      click_button('Create User')
+      click_link "All Users"
+      expect(page).to have_css('.user-row', count: 1)
+    end  
+
 
   end
 
