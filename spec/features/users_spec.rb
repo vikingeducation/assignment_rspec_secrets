@@ -182,7 +182,6 @@ feature "Creating secrets" do
         scenario "goes to secret show page" do
           click_button('Create Secret')
           secret = Secret.find_by_title("Foo Title")
-          save_and_open_page
           expect(current_path).to eq(secret_path(secret))
         end
       end
@@ -209,4 +208,66 @@ feature "Creating secrets" do
       expect(current_path).to eq(new_session_path)
     end
   end
+end
+
+feature 'Edit Secret' do
+  let(:new_user){ create(:user) }
+  let(:new_secret){ create(:secret, title: "New User's Secret", author: new_user) }
+
+  before do
+    sign_up
+    click_button('Create User')
+    click_link('All Secrets')
+    click_link('New Secret')
+    fill_in_secret_form
+    click_button('Create Secret')
+  end
+
+  context 'User who posted secret signed in' do
+    scenario 'User can edit their own secret' do
+      secret = Secret.find_by_title("Foo Title")
+      click_link('Edit')
+      expect(current_path).to eq(edit_secret_path(secret))
+    end
+
+    scenario 'Secret updates when user edits it' do
+      click_link('Edit')
+      fill_in_secret_form("New Title", "New Body")
+      click_button('Update Secret')
+      expect(page).to have_content("New Title")
+    end
+  end
+
+  context "User cannot edit another user's secret" do
+
+    scenario "Edit link doesn't appear" do
+      visit(secret_path(new_secret))
+      expect(page).not_to have_content('Edit')
+    end
+
+  end
+end
+
+feature 'Delete Secret' do
+  let(:new_user){ create(:user) }
+  let(:new_secret){ create(:secret, title: "New User's Secret", author: new_user) }
+
+  before do
+    sign_up
+    click_button('Create User')
+    click_link('All Secrets')
+    click_link('New Secret')
+    fill_in_secret_form
+    click_button('Create Secret')
+    visit(secrets_path)
+  end
+
+  context 'User who posted secret signed in' do
+    scenario 'User can delete their own secret' do
+      secret = Secret.find_by_title("Foo Title")
+      
+      expect{ click_link('Destroy') }.to change{ Secret.count }.by(-1)
+    end
+  end
+
 end
