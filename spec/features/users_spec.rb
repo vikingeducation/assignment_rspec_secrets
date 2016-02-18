@@ -150,3 +150,63 @@ feature "User Sign In" do
     end
   end
 end
+
+feature "Creating secrets" do
+  context "user is signed in" do
+    before do
+      sign_up
+      click_button('Create User')
+    end
+
+    scenario "create secret" do
+      click_link('All Secrets')
+      click_link('New Secret')
+      expect(current_path).to eq(new_secret_path)
+    end
+
+    context "user on secret creation page" do
+      before do
+        click_link('All Secrets')
+        click_link('New Secret')
+      end
+
+      context "valid secret creation" do
+        before do
+          fill_in_secret_form
+        end
+
+        scenario "valid information creates secret" do
+          expect{ click_button('Create Secret')}.to change{ Secret.count }.by(1)
+        end
+
+        scenario "goes to secret show page" do
+          click_button('Create Secret')
+          secret = Secret.find_by_title("Foo Title")
+          save_and_open_page
+          expect(current_path).to eq(secret_path(secret))
+        end
+      end
+
+      scenario "blank title fails to create" do
+        fill_in_secret_form(nil,"Foobar")
+        expect{ click_button('Create Secret')}.to change{ Secret.count }.by(0)
+      end
+
+      scenario "blank body fails to create" do
+        fill_in_secret_form("Foo title",nil)
+        expect{ click_button('Create Secret')}.to change{ Secret.count }.by(0)
+      end
+    end
+  end
+
+  context "user not signed in" do
+    before do
+      visit(root_path)
+    end
+
+    scenario "attempting to create a secret redirects to login page" do
+      click_link('New Secret')
+      expect(current_path).to eq(new_session_path)
+    end
+  end
+end

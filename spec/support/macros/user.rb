@@ -18,5 +18,10 @@ module Macros
       fill_in 'Email', with: email
       fill_in 'Password', with: password
     end
+
+    def fill_in_secret_form(title="Foo Title", body="Bar Body")
+      fill_in "Title", with: title
+      fill_in "Body", with: body
+    end
   end
 end
