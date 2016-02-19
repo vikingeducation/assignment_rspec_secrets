@@ -4,28 +4,46 @@ describe 'secrets/index.html.erb' do
 
   let(:secret) { create(:secret) }
 
-  before :each do
-    def view.signed_in_user?
-      false
+  describe "visitors and not signed in users" do
+
+    before :each do
+      def view.signed_in_user?
+        false
+      end
+      @secret = secret
+      def view.current_user
+        @secret.author
+      end
     end
-    @secret = secret
-    def view.current_user
-      @secret.author
+
+    it 'does not show secret author for visitor' do
+      assign(:secrets, [secret])
+      
+      render
+      expect(rendered).to have_content("hidden")
     end
   end
 
-  it 'does not show secret author for visitor' do
-    assign(:secrets, [secret])
+  describe "signed in users" do
     
-    render
-    expect(rendered).to have_content("hidden")
+    before :each do
+      def view.signed_in_user?
+        true
+      end
+
+      @secret = secret
+      def view.current_user
+        @secret.author
+      end
+    end
+
+    it 'shows author of secret for users' do
+      assign(:secrets, [secret])
+      
+      render
+      expect(rendered).to have_content("#{@secret.author.name}")
+    end
   end
-
-
-
-
-
-
 
 end
 
