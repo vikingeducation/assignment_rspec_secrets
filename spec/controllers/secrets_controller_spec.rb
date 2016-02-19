@@ -13,4 +13,17 @@ describe SecretsController do
     end
   end
 
+
+  describe "POST #create" do
+
+    let(:user) { create(:user) }
+
+    it "can make new secret" do
+      post :create, {:secret => attributes_for( :secret )}, { user_id: user.id }
+      # new_secret = assigns( :secret ).reload
+      expect(response).to redirect_to( secret_path( assigns( :secret ) ) )
+    end
+  end
+
 end
+  

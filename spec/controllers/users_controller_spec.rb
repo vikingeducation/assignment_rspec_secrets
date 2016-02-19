@@ -45,15 +45,16 @@ describe UsersController do
       expect(response).to render_template( :edit )
     end
 
-    it "can DELETE request to #destroy" do
+    it "can DELETE request to #destroy  redirects to users" do
       delete :destroy, { id: user.id }, { user_id: user.id }
-      #expect().to 
+      expect(response).to  redirect_to( users_path )
     end
 
-    it "tries to DELETE request another user's #destroy" do
+    it "tries to DELETE request another user's #destroy ridirects to root" do
       delete :destroy, { id: user_2.id }, { user_id: user.id }
       expect(response).to redirect_to( root_path )
     end
+
 
   end
 
