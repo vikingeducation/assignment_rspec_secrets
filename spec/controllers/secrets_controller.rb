@@ -100,6 +100,25 @@ describe SecretsController do
  
     end
 
+    describe 'DELETE #destroy when not logged in' do
+      it 'does not reduce the count of secrets by 1' do
+        
+        session[:user_id] = nil
+        secret
+        expect {delete :destroy, id: secret.id
+        }.to change(Secret, :count).by(0)
+
+      end
+    end
+
+    describe 'UPDATE #create when not logged in' do
+      it 'does not update the secret' do
+        session[:user_id] = nil
+        put :update, id: secret.id, secret: attributes_for(:secret, name: "New Name")
+        expect(response).to redirect_to new_session_path
+      end
+    end
+
   end
 
 end

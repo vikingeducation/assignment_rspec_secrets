@@ -98,10 +98,22 @@ describe UsersController do
 
     describe 'DELETE #destroy when not logged in' do
       it 'does not reduce the count of users by 1' do
+        user
+        #session[:user_id] = 12345
+        expect {delete :destroy, id: user.id
+        }.to change(User, :count).by(0)
 
       end
     end
 
+    describe 'UPDATE #create when not logged in' do
+      it 'does not update the user' do
+        user
+        put :update, id: user.id, user: attributes_for(:user, name: "New Name")
+        expect(response).to redirect_to new_session_path
+      end
+    end
+    
   end
 
 end
