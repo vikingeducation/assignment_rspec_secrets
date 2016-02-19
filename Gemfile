@@ -32,9 +32,16 @@ gem 'spring',        group: :development
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-group :development do
+group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails', '~> 4.0'
+  gem 'hirb'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'guard'
+  gem 'guard-rspec'
 end
 
 # Use unicorn as the app server
@@ -45,4 +52,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
