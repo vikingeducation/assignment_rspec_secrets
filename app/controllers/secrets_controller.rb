@@ -53,7 +53,7 @@ class SecretsController < ApplicationController
     end
   end
 
-  # DELETE /secrets/1
+  # DELETE /secrets/1g
   # DELETE /secrets/1.json
   def destroy
     @secret.destroy
