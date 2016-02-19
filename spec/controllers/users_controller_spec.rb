@@ -1,103 +1,108 @@
 # spec/controllers/users_controller_spec.rb
 require 'rails_helper'
 
-describe SecretsController do
+describe UsersController do
 
   describe 'user access' do
     let(:user){ create(:user) }
 
-    before :each do
-
-      session[:user_id] = user.id
-
-    end
-
 
     describe 'GET #show' do
-      it "shows secret" do
-
-        get :show, id: secret.id
-        expect(assigns(:secret)).to match secret
+      it "shows user" do
+        session[:user_id] = user.id
+        get :show, id: user.id
+        expect(assigns(:user)).to match user
       end
  
     end
-
+  #
     describe 'GET #new' do
-      it "new secret" do
+      it "new user" do
 
         get :new
-        expect(assigns(:secret)).to be_a_new(Secret)
+        expect(assigns(:user)).to be_a_new(User)
       end
- 
+
     end
-
+  #
     describe 'POST #create' do
-      it "creates a secret" do
+      it "creates a user" do
 
-        expect {post :create, secret: attributes_for(:secret)
-               }.to change(Secret, :count).by(1)
+        expect {post :create, user: attributes_for(:user)
+               }.to change(User, :count).by(1)
       end
- 
+
     end
 
     describe 'POST #create redirects to show' do
       it "redirects after secret secret" do
 
-        post :create, secret: attributes_for(:secret)
-        expect(response).to redirect_to secret_path(assigns(:secret))      
+        post :create, user: attributes_for(:user)
+        expect(response).to redirect_to user_path(assigns(:user))
       end
- 
+
     end
 
     describe 'POST #create creates a flash message for success' do
       it "creates a success flash message" do
 
-        post :create, secret: attributes_for(:secret)
+        post :create, user: attributes_for(:user)
         expect(request.flash[:notice]).to_not be_nil
       end
- 
+
     end
 
     describe 'POST #create creates a flash message for failure' do
       it "creates a failure flash message" do
 
-        post :create, secret: attributes_for(:secret, body: "x")
+        post :create, user: attributes_for(:user, name: "x")
         expect(response).to render_template :new
       end
- 
+
     end
-
-
-    describe 'GET #edit' do
-      it "edit secret" do
-
-        secret
-     
-        get :edit, id: secret.id
-        expect(assigns(:secret).id).to eq secret.id
+  #
+  #
+  #
+   describe 'POST #updates redirects to show' do
+      it "redirects after user update when logged in" do
+        session[:user_id] = user.id
+        put :update, id: user.id, user: attributes_for(:user, name: "New Name")
+        expect(response).to redirect_to user_path(assigns(:user))
       end
- 
+
     end
 
    describe 'POST #updates redirects to show' do
-      it "redirects after secret update" do
-
-        put :update, id: secret.id, secret: attributes_for(:secret, body: "New Body")
-        expect(response).to redirect_to secret_path(assigns(:secret))      
+      it "redirects after user update when logged in" do
+        session[:user_id] = user.id
+        put :update, id: user.id, user: attributes_for(:user, name: "New Name")
+        user.reload
+        expect(user.name).to eq "New Name"
       end
- 
+
+   end
+
+    describe 'DELETE #destroy when logged in' do
+      it 'redirects to index after user is destroyed when user is logged in' do
+        session[:user_id] = user.id
+        delete :destroy, id: user.id
+        expect(response).to redirect_to users_path
+      end
+
+      it 'redirects to index after user is destroyed when user is logged in' do
+        session[:user_id] = user.id
+        expect {delete :destroy, id: user.id
+        }.to change(User, :count).by(-1)
+      end
     end
 
-   describe 'POST #updates redirects to show' do
-      it "redirects after secret update" do
+    describe 'DELETE #destroy when not logged in' do
+      it 'does not reduce the count of users by 1' do
 
-        put :update, id: secret.id, secret: attributes_for(:secret, body: "New Body")
-        secret.reload
-        expect(secret.body).to eq "New Body"     
       end
- 
     end
 
   end
 
 end
+

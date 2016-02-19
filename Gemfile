@@ -47,6 +47,7 @@ group :test do
   gem 'factory_girl_rails', '~> 4.0'
   gem 'capybara'
   gem 'launchy'
+  gem 'database_cleaner'
 end  
 # Use unicorn as the app server
 # gem 'unicorn'
