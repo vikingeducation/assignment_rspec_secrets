@@ -30,7 +30,7 @@ describe "secrets/index.html.erb" do
 
 
     before do
-      @user = create(:user)
+      @user = create(:user)   # need to be here instead of let block for some reason
       @secret = create(:secret, author: @user)
 
       def view.signed_in_user?
