@@ -63,7 +63,7 @@ describe User do
     it "is invalid with a 5 letter password" do
       new_user = build(:user, password: "fooba")
       expect(new_user).not_to be_valid
-      expect{ new_user.save! }.to raise_error
+      expect{ new_user.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "is valid with a 6 letter password" do
@@ -78,7 +78,7 @@ describe User do
     it "is invalid with a 17 letter password" do
       new_user = build(:user, password: "foobarfoobarfooba")
       expect(new_user).not_to be_valid
-      expect{ new_user.save! }.to raise_error
+      expect{ new_user.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 
