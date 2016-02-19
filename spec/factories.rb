@@ -7,7 +7,6 @@ FactoryGirl.define do
   end
 
   factory :secret do
-    # t.integer  "author_id"
     title "New title"
     body "Lorem ipsum"
     author

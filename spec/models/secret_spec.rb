@@ -1,10 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe Secret, :type => :model do
+describe Secret do
 
   let(:secret){ build(:secret) }
 
   context "validations" do
+    # TODO: flip these
 
     it 'is valid with a title, body, and author' do
       expect(secret).to be_valid
