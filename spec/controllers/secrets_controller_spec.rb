@@ -2,28 +2,63 @@ require 'rails_helper.rb'
 
 describe SecretsController do
 
+  context "Visitor" do
 
-  describe "GET #show" do
-    let(:user) { create(:user) }
-    let(:secret) { create(:secret, author: user)}
+    describe "GET #show" do
+      let(:user) { create(:user) }
+      let(:secret) { create(:secret, author: user)}
 
-    it "renders the correct secret properly" do
-      get :show, id: secret
-      expect(response).to render_template :show
+      it "renders the correct secret properly" do
+        get :show, id: secret
+        expect(response).to render_template :show
+      end
     end
   end
 
-
-  describe "POST #create" do
+  context "Logged In User" do
 
     let(:user) { create(:user) }
+    let(:user_2) { create(:user)}
+    let(:secret) { create(:secret, author: user) }
+    let(:secret_2) { create(:secret, author: user_2) }
 
-    it "can make new secret" do
-      post :create, {:secret => attributes_for( :secret )}, { user_id: user.id }
-      # new_secret = assigns( :secret ).reload
-      expect(response).to redirect_to( secret_path( assigns( :secret ) ) )
+    describe "POST #create" do
+
+      it "can make new secret" do
+        post :create, {:secret => attributes_for( :secret )}, { user_id: user.id }
+        # new_secret = assigns( :secret ).reload
+        expect(response).to redirect_to( secret_path( assigns( :secret ) ) )
+      end
+
+      it "upon creation, sets flash success message" do
+        post :create, {:secret => attributes_for( :secret )}, { user_id: user.id }
+        expect(flash[:notice]).to_not be(nil)
+      end
+
+      it "reredners new template on invalidated secret" do
+        post :create, { secret: { title: "", body: "" } }, { user_id: user.id }
+        expect(response).to render_template( :new )
+      end
+
+    end
+
+    describe "GET #edit" do
+
+      it "can send GET request to edit form for user's own secrets" do
+        secret
+        get :edit, { id: secret.id }, { user_id: user.id }
+        expect(response).to render_template( :edit )
+      end
+
+      it "cannot edit other's secrets" do
+        expect do
+          get :edit, { id: secret_2.id }, { user_id: user.id }
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    describe "PATCH #update" do
     end
   end
 
 end
-  
