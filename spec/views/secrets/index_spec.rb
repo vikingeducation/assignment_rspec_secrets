@@ -28,32 +28,26 @@ describe "secrets/index.html.erb" do
 
   context "logged in user" do
 
-    let(:user) { create(:user) }
-    let(:secret) { create(:secret, author: user) }
 
     before do
+      @user = create(:user)
+      @secret = create(:secret, author: @user)
+
       def view.signed_in_user?
         true
       end
 
       def view.current_user
-        user
+        @user
       end
-
-
     end
-    
-    before { user }
 
 
     it "can see author of secrets" do
-
       assign(:secrets, Secret.all)
-
       render
 
-      expect(rendered).to_not have_content "**hidden**"
-      expect(rendered).to have_content "Foo"
+      expect(rendered).to have_content @user.name
 
     end
   end
