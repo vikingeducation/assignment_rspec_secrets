@@ -23,6 +23,32 @@ describe SecretsController do
   end
 
 
+  describe 'POST#create' do
+    it 'creates a secret with valid params' do
+      expect { post :create, secret: attributes_for(:secret) }.to change { Secret.count }.by(1)
+      expect(response).to redirect_to assigns(:secret)
+    end
+
+    it 'does not create a secret with invalid params' do
+      expect { post :create, secret: attributes_for(:secret, title: nil) }.to change { Secret.count }.by(0)
+      expect(response).to render_template(:new)
+    end
+
+    it 'sets flash method for valid params' do
+      post :create, secret: attributes_for(:secret)
+      expect(flash.notice).to_not be nil
+    end
+
+    it 'does not set flash method for invalid params' do
+      post :create, secret: attributes_for(:secret, body: nil)
+      expect(flash.notice).to be nil
+    end
+
+  end
+
+
+
+
   describe 'PUT#update' do
 
     it 'user can edit their own secret' do
@@ -47,6 +73,12 @@ describe SecretsController do
       get :edit, id: secret.id
       expect(response).to render_template :edit
     end
+
+    it 'sets @secret instance variable' do
+      get :edit, id: secret.id
+      expect(assigns(:secret)).to eq(secret)
+    end
+
 
     it 'denies access for unauthorized user' do
       another_secret = create(:secret)

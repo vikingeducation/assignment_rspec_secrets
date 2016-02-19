@@ -32,11 +32,19 @@ describe UsersController do
   end
 
 
+  describe 'GET#edit' do
 
-
-
-
-
-
+    it 'sets @user instance variable' do
+      user
+      session[:user_id] = user.id
+      get :edit, id: user.id
+      expect(assigns(:user)).to eq(user)
+    end
 
   end
+
+
+
+
+
+end
