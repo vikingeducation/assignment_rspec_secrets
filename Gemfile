@@ -14,6 +14,8 @@ gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 
+gem 'hirb'
+
 # allow pry debugging
 gem 'pry-byebug'
 
@@ -35,18 +37,17 @@ gem 'bcrypt', '~> 3.1.7'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails', '~> 4.0'
 end
 
-group :development, :test do
+
+group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails', '~> 4.0'
   gem 'capybara'
   gem 'launchy'
-  gem 'selenium-webdriver'
-  gem 'guard-rspec', require: false
-  gem 'database_cleaner'
-end
-
+end  
 # Use unicorn as the app server
 # gem 'unicorn'
 
@@ -55,3 +56,4 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
