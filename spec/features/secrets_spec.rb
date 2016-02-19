@@ -3,20 +3,16 @@ require 'rails_helper'
 feature 'Visit_Root_Page' do
   
 
+  let(:NUM_SECRETS){ 5 }
   let(:user){ create(:user) }
   let(:secrets){create_list(:secret, 5, author: user)}
 
   context "visit root page as anonymus user" do
-    # before do
-    #   user.email = user.email + "x"
-    #   sign_in(user)
-    # end
 
     before do
       secrets
       visit root_path
     end
-
 
     scenario "shows the secrets index page" do
       expect(page).to have_content "Listing secrets"

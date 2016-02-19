@@ -4,12 +4,28 @@ describe UsersController do
 
 
   describe "POST #create" do
-    let(:user) { build(:user) }
 
-    it "renders the correct secret properly" do
-      get :show, id: secret
-      expect(response).to render_template :show
+    it "successful create redirects to user show page" do
+      #attributes_for is FactoryGirl method
+      post :create, :user => attributes_for( :user )
+      expect(response).to redirect_to user_path( assigns(:user) )
     end
+  
+    it "unsuccessful create renders user new page" do
+      #attributes_for is FactoryGirl method
+      post :create, :user => attributes_for( :user_with_no_password )
+      expect(response).to render_template( :new )
+    end
+
+    it "can edit logged in user" do
+      #attributes_for is FactoryGirl method
+      user =  create(:user)
+
+
+
+      expect(response).to render_template( :new )
+    end
+
   end
 
 end
