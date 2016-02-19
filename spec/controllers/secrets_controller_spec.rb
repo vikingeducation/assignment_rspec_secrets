@@ -2,25 +2,33 @@ require 'rails_helper.rb'
 
 describe SecretsController do
 
+  let(:user) { create(:user) }
+  let(:secret) { create(:secret, author: user)}
   context "Visitor" do
 
     describe "GET #show" do
-      let(:user) { create(:user) }
-      let(:secret) { create(:secret, author: user)}
 
       it "renders the correct secret properly" do
         get :show, id: secret
         expect(response).to render_template :show
       end
     end
+    
+    describe "PATCH #update" do
+      it "can't update others secrets" do
+        new_title = "valid title"
+        put :update, { id: secret.id, :secret => attributes_for( :secret, title: new_title )}
+        secret.reload
+        expect(secret.title).to_not eq(new_title)
+      end
+    end
+
   end 
 
   context "Logged In User" do
 
-    let!(:user) { create(:user) }
-    let!(:user_2) { create(:user)}
-    let!(:secret) { create(:secret, author: user) }
-    let!(:secret_2) { create(:secret, author: user_2) }
+    let(:user_2) { create(:user)}
+    let(:secret_2) { create(:secret, author: user_2) }
 
     describe "POST #create" do
 
@@ -70,7 +78,7 @@ describe SecretsController do
         delete :destroy, { id: secret.id }, { user_id: user.id }
         expect(response).to redirect_to( secrets_path )
       end
-
+ 
     end
 
   end
