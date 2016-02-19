@@ -21,10 +21,27 @@ describe "users/index.html.erb" do
     
     assign(:users, users) 
     
-    #render partial: 'layout'
     render template: 'users/index' , layout: 'layouts/application'
 
     expect(rendered).to have_content('Logout')
+
+  end
+
+  it "does shows login for unsigned user" do
+ 
+    def view.signed_in_user?
+      false
+    end
+
+    def view.current_user
+      @users[0]
+    end
+   
+    assign(:users, users) 
+    
+    render template: 'users/index' , layout: 'layouts/application'
+
+    expect(rendered).to have_content('Login')
 
   end
 end
