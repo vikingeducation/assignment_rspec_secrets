@@ -6,10 +6,7 @@ feature 'Users' do
   let (:user){ create(:user) }
 
   before do
-    sign_in(user)
     create_list(:secret, 25)
-    sign_out
-
     visit root_path
   end
 
@@ -28,10 +25,11 @@ feature 'Users' do
       expect(page).to have_content "Not authorized, please sign in!"
     end
 
-    scenario 'does not allow deleting a secret' do
-      page.driver.submit :delete, "/secrets/#{Secret.last.id}", {}
-      expect(page).to have_content "Not authorized, please sign in!"
-    end
+    # No need to test things like purposely going around security (this is more of a controller test)
+    # scenario 'does not allow deleting a secret' do
+    #   page.driver.submit :delete, "/secrets/#{Secret.last.id}", {}
+    #   expect(page).to have_content "Not authorized, please sign in!"
+    # end
 
     scenario 'allows sign up' do
       click_link 'All Users'
