@@ -87,4 +87,23 @@ describe Secret do
       end
     end
   end
+
+  describe "class methods" do
+    describe "self.last_five" do
+
+      it "returns a maximum of 5 secrets when there are more than 5 secrets" do
+        create_list(:secret, 7)
+        expect(Secret.last_five.count).to eq(5)
+      end
+
+      it "returns all secrets when there are 5 secrets or less" do
+        create_list(:secret, 4)
+        expect(Secret.last_five.count).to eq(4)
+      end
+
+      it "returns the 5 secrets with the highest id numbers (the last five)" do
+        expect(Secret.last_five).to eq(Secret.order(id: :desc).limit(5))
+      end
+    end
+  end
 end
