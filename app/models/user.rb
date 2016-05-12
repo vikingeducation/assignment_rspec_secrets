@@ -9,5 +9,6 @@ class User < ActiveRecord::Base
   validates :email, :uniqueness => true
   validates :password,
             :length => { :in => 6..16 },
+            # If set to true, skips the validation if the attribute is nil (default is false)
             :allow_nil => true
 end
