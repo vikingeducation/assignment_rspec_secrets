@@ -59,6 +59,8 @@ describe Secret do
         last_five = Secret.order(id: :desc).limit(5)
         expect(Secret.last_five).to eq(last_five)
       end
+
+      
     end
   end
 
