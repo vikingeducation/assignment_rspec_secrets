@@ -18,4 +18,8 @@ module LoginMacros
     click_button("Create Secret")
   end
 
+  def session_sign_in(user)
+    session[:user_id] = user.id
+  end
+
 end
