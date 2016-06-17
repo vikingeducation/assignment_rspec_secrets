@@ -37,7 +37,7 @@ describe SecretsController do
 
         expect{
           delete :destroy, id: secret.id
-        }.to raise_exception
+        }.to raise_exception()
       end
     end
   end
@@ -61,10 +61,17 @@ describe SecretsController do
         expect(flash["notice"]).to match(/successfully/)
       end
 
-      it "should not create a secret if missing attributes" do
+      it "should not create a secret if title missing attributes" do
         expect{
           post :create, secret: attributes_for( :secret,
                                                 title: "")
+        }.to change(Secret, :count).by(0)
+      end
+
+      it "should not create a secret if body missing attributes" do
+        expect{
+          post :create, secret: attributes_for( :secret,
+                                                body: "")
         }.to change(Secret, :count).by(0)
       end
     end
@@ -79,7 +86,7 @@ describe SecretsController do
       session_sign_in(user)
     end
 
-    context "with valids attributes" do
+    context "with valid attributes" do
       let(:updated_title){ "updated_title"}
 
       it "find the secret" do
@@ -99,10 +106,15 @@ describe SecretsController do
       end
 
       it 'update the secret' do
-        puts :update, id: secret.id,
+        put :update, id: secret.id,
                       secret: attributes_for( :secret,
                                               title: updated_title )
+        puts secret.id
+        puts Secret.find(secret.id).title
         secret.reload
+        # secret = Secret.find(secret.id)
+        # puts secret.title
+        # puts updated_title
         expect(secret.title).to eq(updated_title)
       end
     end

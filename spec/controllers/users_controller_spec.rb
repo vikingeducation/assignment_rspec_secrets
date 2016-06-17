@@ -72,11 +72,16 @@ describe UsersController do
       end
     end
 
+
     context 'Visitor' do
+
       it "should not be able to delete a user account" do
+        user
+        puts User.all.count
         expect{
           delete :destroy, id: user.id
         }.to change(User, :count).by(0)
+        puts User.all.count
       end
 
       it 'should redirect the visitor to sign in' do

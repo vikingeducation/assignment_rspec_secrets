@@ -10,13 +10,27 @@ describe User do
     end
 
     it "should not be valid if a name is missing" do
-      user.name = ""
-      expect(user).not_to be_valid
+      invalid_name = [nil, "", " "]
+      invalid_name.each do |name|
+        user.name = name
+        expect(user).not_to be_valid
+      end
     end
 
     it "should not be valid if a email is missing" do
-      user.email = ""
-      expect(user).not_to be_valid
+      invalid_email = [nil, "", " "]
+      invalid_email.each do |email|
+        user.email = email
+        expect(user).not_to be_valid
+      end
+    end
+
+    it "should not be valid with some wrong emails" do
+      invalid_email = ["false_email", "false@email", "email.com"]
+      invalid_email.each do |email|
+        user.email = email
+        expect(user).not_to be_valid
+      end
     end
 
     it "should be invalid is password is too short, or too long" do

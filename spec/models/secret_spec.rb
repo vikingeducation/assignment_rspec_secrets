@@ -50,16 +50,16 @@ describe Secret do
 
   context "classMethod" do
     describe "#last_five" do
-      let(:num_secrets){ 5 }
+      let(:num_secrets){ 20 }
       before do
         user.secrets = create_list(:secret, num_secrets)
       end
 
       it "should return the last 5 secrets" do
         last_five = Secret.order(id: :desc).limit(5)
+
         expect(Secret.last_five).to eq(last_five)
       end
-
       
     end
   end

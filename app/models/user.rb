@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
 
   validates :name, :email, :presence => true
   validates :name, :length => { :in => 3..20 }
-  validates :email, :uniqueness => true
+  validates :email, :uniqueness => true,
+                    :format => { with: /.*@.*\..*/ }
   validates :password,
             :length => { :in => 6..16 },
             :allow_nil => true
