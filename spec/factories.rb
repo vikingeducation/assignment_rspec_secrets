@@ -12,4 +12,15 @@ FactoryGirl.define do
 
   end
 
+  factory :secret do
+    trait :with_attributes do
+      title "The Secret"
+      body "This is a secret."
+    end
+
+    trait :without_attributes do
+    end
+
+  end
+
 end
