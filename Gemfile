@@ -42,7 +42,11 @@ group :test do
   gem 'rspec-rails'
   gem 'guard'
   gem 'guard-rspec'
+end
+
+group :development, :test do
   gem 'factory_girl_rails'
+  gem 'shoulda-matchers', '~> 3.1'
 end
 
 # Use unicorn as the app server
@@ -53,4 +57,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
