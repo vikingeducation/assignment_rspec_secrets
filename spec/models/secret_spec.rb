@@ -47,15 +47,25 @@ describe Secret do
     let(:user) { build(:user) }
     let(:secret) {build(:secret) }
 
-    it "has an associated author" do 
+    it "has an associated author" do
       expect(secret).to respond_to(:author)
     end
 
     it "an author to be associated with a specific secret" do
-      user.secrets << secret
+      secret.author = user
       expect(secret).to be_valid
     end
 
+    it "is invalid with a unreal author" do
+      secret.author_id = "laksdjf"
+      expect(secret).to_not be_valid
+    end
+  end
+
+  describe "#last_five" do
+    it "returns five secrets" do
+      
+    end
   end
 
 end

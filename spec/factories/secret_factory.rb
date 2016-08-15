@@ -1,7 +1,7 @@
 FactoryGirl.define do
 
   factory :secret do
-    title "This is my secret"
+    sequence(:title) { |n| "Secret_title#{n}" }
     body "Please don't tell"
 
     association :author, factory: :user
