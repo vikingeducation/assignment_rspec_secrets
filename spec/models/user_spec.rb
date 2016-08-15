@@ -45,4 +45,10 @@ describe User do
     expect(user1).to respond_to(:secrets)
   end
 
+  it "does not accept invalid data" do
+    existing_email = user1.email
+    new_user = build(:user,password: 'DROP TABLE users', email: existing_email)
+    expect(new_user).to_not be_valid
+  end
+
 end
