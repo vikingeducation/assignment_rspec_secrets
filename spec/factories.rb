@@ -21,6 +21,8 @@ FactoryGirl.define do
     trait :without_attributes do
     end
 
+    association :author, factory: :user, name: "Mike", email: "mike@gmail.com", password: "asdfasdf"
+
   end
 
 end

@@ -41,4 +41,8 @@ describe User do
     expect(user1).to be_valid
   end
 
+  it "responds to secret association" do
+    expect(user1).to respond_to(:secrets)
+  end
+
 end
