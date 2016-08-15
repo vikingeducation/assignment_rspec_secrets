@@ -13,7 +13,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
-
 # allow pry debugging
 gem 'pry-byebug'
 
@@ -35,6 +34,7 @@ gem 'bcrypt', '~> 3.1.7'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'guard-rspec', require: false
 end
 
 # Use unicorn as the app server
@@ -46,3 +46,7 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+group :development, :test do 
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+end
