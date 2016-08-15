@@ -50,7 +50,18 @@ describe User do
     expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
+  it "responds to secret" do
+    expect(user).to respond_to(:secrets)
+  end
 
+  let(:num_secrets){3}
+  before do
+    user.secrets = create_list(:secret, num_secrets)
+    user.save!
+  end
+  it "returns the number of a User's secrets" do
+    expect(user.secrets.count).to eq(num_secrets)
+  end
 
 
 end
