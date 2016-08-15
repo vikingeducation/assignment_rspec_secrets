@@ -14,7 +14,7 @@ describe User do
     end
 
     it "ensures length of name" do
-      is_expected.to validate_length_of(:name)
+      is_expected.to validate_length_of(:name).is_at_least(3).is_at_most(20)
     end
 
     it "is valid with default attributes" do
@@ -50,6 +50,12 @@ describe User do
 
     it "has associated secrets" do
       expect(user).to respond_to(:secrets)
+    end
+
+    it "has many secrets" do
+      expect(user).to have_many(:secrets)
+      #or
+      #is_expected.to have_many (:secrets)
     end
 
   end
