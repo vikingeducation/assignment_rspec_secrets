@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.6'
 # Use sqlite3 as the database for Active Record
@@ -37,6 +38,15 @@ group :development do
   gem 'binding_of_caller'
 end
 
+
+group :development, :test do
+  gem 'factory_girl_rails', '~> 4.0'
+  gem 'rspec-rails'
+end
+
+group :development do
+  gem 'guard-rspec', require: false
+end
 # Use unicorn as the app server
 # gem 'unicorn'
 
