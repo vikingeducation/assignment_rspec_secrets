@@ -37,6 +37,15 @@ group :development do
   gem 'binding_of_caller'
 end
 
+
+group :development, :test do
+  gem 'factory_girl_rails', '~> 4.0'
+  gem 'rspec-rails'
+end
+
+group :development do
+  gem 'guard-rspec', require: false
+end
 # Use unicorn as the app server
 # gem 'unicorn'
 
