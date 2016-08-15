@@ -45,4 +45,13 @@ describe Secret do
     end
   end
 
+  context "model methods" do
+
+    it 'retrieves the last five created secrets' do
+      first_secret = create(:secret)
+      last_five_secrets = create_list(:secret, 5)
+      expect(Secret.last_five).to match_array(last_five_secrets)
+    end
+  end
+
 end

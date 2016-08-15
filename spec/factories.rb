@@ -1,14 +1,16 @@
 FactoryGirl.define do
   factory :user, :aliases => [:author] do
+    # sequence(:name){ |n| "Foo#{n}"}
     name "Foo"
-    email { "#{name}@exaxmple.com" }
+    sequence(:email) { |n| "#{n}@exaxmple.com" }
     password "foobar"
     password_confirmation "foobar"
-    
   end
 
   factory :secret do
-    title "Title"
+    sequence(:title) do |n|
+      "foo#{n}" # e.g. "foo312"
+    end
     body "body"
 
     #assocation with user 1:X
