@@ -13,7 +13,12 @@ describe Secret do
     expect(secret2).to_not be_valid
   end
 
-  it "validates for title length (greater than 3 characters)" do
+  # Title validations.
+  it "is valid when title is greater than 3 characters" do
+    should validate_length_of(:title).is_at_least(4)
+  end
+
+  it "is invalid when title has less than 4 characters" do
     new_secret = build(:secret, :with_attributes, :title => "hi")
     expect(new_secret).to_not be_valid
   end
