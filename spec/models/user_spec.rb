@@ -13,17 +13,23 @@ describe User do
     expect(user2).to_not be_valid
   end
 
-  it "validates password to be greater than 5 characters" do
+  # Password validations.
+  it "has a secure password" do 
+    is_expected.to have_secure_password
+  end
+
+  it "is valid when password has at least 6 characters" do 
+    should validate_length_of(:password).is_at_least(6)
+  end
+
+  it "is invalid when password has less than 6 characters" do
     new_user = build(:user,password: 'abc')
     expect(new_user).to_not be_valid
   end
 
-  it "is valid when password is greater than 5 characters" do
-    expect(user1).to be_valid
-  end
-
-  it "is valid when email does not exist in the database" do
-    expect(user1).to be_valid
+  # Email validations
+  it "is valid when the email does not yet exist in the database" do
+    should validate_uniqueness_of(:email)
   end
 
   it "is invalid when email already exists in the database" do
@@ -32,13 +38,14 @@ describe User do
     expect(new_user).to_not be_valid
   end
 
+  # Name validations.
   it "validates name to be greater than 3 characters" do
-    new_user = build(:user,name: 'a')
-    expect(new_user).to_not be_valid
+    should validate_length_of(:name).is_at_least(3)
   end
 
-  it "is valid when password is greater than 3 characters" do
-    expect(user1).to be_valid
+  it "is invalid when name has less than 3 characters" do
+    new_user = build(:user,name: 'a')
+    expect(new_user).to_not be_valid
   end
 
   it "responds to secret association" do
