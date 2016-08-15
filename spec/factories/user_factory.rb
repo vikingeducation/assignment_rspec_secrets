@@ -5,6 +5,7 @@ FactoryGirl.define do
     email "Foobar@email.com"
     password "foobar"
 
+
   end
 
 end

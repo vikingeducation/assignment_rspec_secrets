@@ -34,6 +34,7 @@ describe User do
 
   describe "Associations" do
     let(:user) { build(:user) }
+    let(:secret) {build(:secret) }
 
     it "has associated secrets" do
       expect(user).to respond_to(:secrets)
