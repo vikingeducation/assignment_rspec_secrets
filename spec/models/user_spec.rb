@@ -5,6 +5,18 @@ describe User do
   describe "Validations" do
     let(:user) { build(:user) }
 
+    it "validates presence of name" do
+      is_expected.to validate_presence_of(:name)
+    end
+
+    it "has a secure password" do
+      is_expected.to have_secure_password
+    end
+
+    it "ensures length of name" do
+      is_expected.to validate_length_of(:name)
+    end
+
     it "is valid with default attributes" do
       expect(user).to be_valid
     end
@@ -39,7 +51,7 @@ describe User do
     it "has associated secrets" do
       expect(user).to respond_to(:secrets)
     end
-    
+
   end
 
 

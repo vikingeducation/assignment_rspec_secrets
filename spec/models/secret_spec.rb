@@ -64,7 +64,10 @@ describe Secret do
 
   describe "#last_five" do
     it "returns five secrets" do
-      
+      10.times do
+        create(:secret)
+      end
+      expect(Secret.last_five.count).to eq(5)
     end
   end
 
