@@ -18,10 +18,7 @@ describe User do
     expect(bad_email_user).not_to be_valid
   end
 
-  it "is invalid with a non-unique email" do 
-    create(:user)
-    expect(second_user).not_to be_valid
-  end
+  it {is_expected.to validate_uniqueness_of(:email)}
 
   it "is invalid with no password" do 
     expect(bad_password_user).not_to be_valid
