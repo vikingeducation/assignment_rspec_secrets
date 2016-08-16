@@ -4,8 +4,6 @@ require 'rails_helper'
 
 feature 'Secrets' do
   before do
-    DatabaseCleaner.strategy = :truncation
-    DatabaseCleaner.clean
     visit root_path
   end
   let(:author) { build(:author) }
@@ -19,11 +17,11 @@ feature 'Secrets' do
   end
 
   scenario "sign up as a visitor" do
-    click_link 'All Users'
-    click_link 'New User'
     fill_in_signup(author)
     expect(page).to have_content('User was successfully created')
   end
+
+
 
   scenario "As a not-signed-in user, I want to sign in to my account" do
     author.save!
@@ -31,45 +29,43 @@ feature 'Secrets' do
     expect(page).to have_content("Welcome, #{author.name}!")
   end
 
-  scenario "As a signed-in user, be able to create a secret" do
-    author.save
-    sign_in(author)
-    click_link("New Secret")
-    fill_in "Title", with: secret.title
-    fill_in "Body", with: secret.body
-    click_button('Create Secret')
-    expect(page).to have_content('Secret was successfully created.')
-  end
+  context 'as a signed-in user' do
 
-  scenario "As a signed-in user, be able to edit one of my secrets" do
-    author.save
-    sign_in(author)
-    click_link("New Secret")
-    fill_in "Title", with: secret.title
-    fill_in "Body", with: secret.body
-    click_button('Create Secret')
-    visit root_path
-    click_link "Edit"
-    fill_in "Title", with: "Edited Title"
-    fill_in "Body", with: "Edited Body"
-    click_button("Update Secret")
-    expect(page).to have_content('Secret was successfully updated.')
-  end
-
-
-  scenario "As a signed-in user, be able to delete one of my secret" do
-    author.save
-    sign_in(author)
-    click_link("New Secret")
-    fill_in "Title", with: secret.title
-    fill_in "Body", with: secret.body
-    click_button('Create Secret')
-    visit root_path
-    click_link "Destroy"
-    page.accept_confirm do
-      click_button "OK"
+    before do
+      author.save
+      sign_in(author)
+      click_link("New Secret")
     end
-    expect(page).to have_no_content(secret.body)
+
+    scenario "be able to create a secret" do
+      fill_in_secret(secret)
+      expect(page).to have_content('Secret was successfully created.')
+    end
+
+    scenario "without a secret, does not have option to delete secrets" do
+      visit root_path
+
+      expect(page).not_to have_link('Destroy')
+    end
+
+    context 'with a secret' do
+
+      before do
+        fill_in_secret(secret)
+        visit root_path
+      end
+
+      scenario "be able to edit one of my secrets" do
+        fill_in_edit
+        expect(page).to have_content('Secret was successfully updated.')
+      end
+
+      scenario "be able to delete one of my secret" do
+        click_link "Destroy"
+        expect(page).to have_no_content("toodloo")
+      end
+
+    end
   end
 
 end
