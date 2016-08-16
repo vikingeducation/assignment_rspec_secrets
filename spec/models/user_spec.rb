@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe User, type: :model do
+describe User do
 
 
     let(:user) { build(:user) }

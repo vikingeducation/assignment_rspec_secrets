@@ -42,6 +42,8 @@ group :test do
   gem 'rspec-rails'
   gem 'guard'
   gem 'guard-rspec'
+  gem 'capybara'
+  gem 'launchy'
 end
 
 group :development, :test do
