@@ -53,12 +53,49 @@ feature 'using user accounts' do
   before do
     visit root_path
     sign_up
+    click_button("Create User")
     click_link("Logout")
   end
 
+  scenario 'not-signed-in user can sign in' do
+    expect(page).to have_content("Login")
+    sign_in
+    expect(page).to have_content("Welcome, Foo!")
+    expect(page).to have_content("Logout")
+    expect(page).to have_content("Listing secrets")
+  end
 
+  scenario 'user cannot sign in with incorrect password' do
+    click_link("Login")
+    fill_in("Email", :with => "foo@email.com")
+    fill_in("Password", :with => "123456789")
+    click_button ("Log in")
+    expect(current_path).to eq('/session')
+  end
 
+  scenario 'signed in user can create a secret' do
+    sign_in
+    expect(page).to have_content("New Secret")
+    click_link("New Secret")
+    expect(page).to have_content("New secret")
+    fill_in("Title", :with => "Secret title")
+    fill_in("Body", :with => "Secret body")
+    expect{ click_button("Create Secret")}.to change(Secret, :count).by(1)
+    expect(page).to have_content("Secret was successfully created.")
+    expect(page).to have_content("Secret title")
+    expect(page).to have_content("Secret body")
+    expect(page).to have_content("Foo")
+  end
 
+  scenario 'secret cannot be created with blank body' do
+    sign_in
+    click_link("New Secret")
+    fill_in("Title", :with => "Secret title")
+    fill_in("Body", :with => "")
+    expect{ click_button("Create Secret")}.not_to change(Secret, :count)
+    expect(page).to have_content("Body can't be blank")
+    expect(current_path).to eq('/secrets')
+  end
 
 
 
