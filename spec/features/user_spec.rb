@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'User sign up' do
   let!(:user) { create(:user) }
-  let!(:secret) { user.secrets.create(attributes_for(:secret)) }
+
 
   before do 
     visit new_user_path
@@ -56,4 +56,15 @@ feature 'User sign in' do
 
     expect(page).to have_content("New secret")
   end
+
+  specify "a signed in user can edit an exisitng secret" do
+    user.secrets.create(attributes_for(:secret))
+
+    click_on "All Secrets"
+    click_on "Edit"
+    
+
+    expect(page).to have_content("Editing secret")
+  end
+
 end

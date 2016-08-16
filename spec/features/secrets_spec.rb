@@ -9,7 +9,6 @@ feature 'Secrets' do
   end
 
   it "Lists secrets on the main page" do 
-    save_and_open_page
     expect(page).to have_content("**hidden**")
   end
 
