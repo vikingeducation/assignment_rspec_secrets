@@ -39,14 +39,21 @@ feature 'User sign in' do
 
   let(:user){ create(:user) }
 
-  specify "the user can sign in from the sign in path" do 
+  before do
     visit new_session_path
     fill_in "Email", with: user.email
     fill_in "Password", with: user.password
 
     click_button "Log in"
+  end
 
+  specify "the user can sign in from the sign in path" do 
     expect(page).to have_content("Welcome, #{user.name}!")
+  end
 
+  specify "a signed in user can create a new secret" do
+    click_on "New Secret"
+
+    expect(page).to have_content("New secret")
   end
 end
