@@ -132,5 +132,6 @@ describe Secret do
       expect(Secret.last_five).to match_array(last_five_secrets)
     end
   end
+end
 
 end

@@ -36,7 +36,7 @@ gem 'bcrypt', '~> 3.1.7'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'guard-rspec', require: false
+  #gem 'guard-rspec', require: false
 end
 
 group :development, :test do
@@ -48,16 +48,12 @@ end
 group :test do
   gem 'rspec'
   gem 'rspec-rails'
-  gem 'guard'
-  gem 'guard-rspec'
+  #gem 'guard'
+  #gem 'guard-rspec'
   gem 'capybara'
   gem 'launchy'
 end
 
-group :development, :test do
-  gem 'factory_girl_rails'
-  gem 'shoulda-matchers', '~> 3.1'
-end
 
 
 # Use unicorn as the app server
