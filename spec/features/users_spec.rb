@@ -97,6 +97,74 @@ feature 'using user accounts' do
     expect(current_path).to eq('/secrets')
   end
 
+  scenario 'secret cannot be created with blank title' do
+    sign_in
+    click_link("New Secret")
+    fill_in("Title", :with => "")
+    fill_in("Body", :with => "Secret body")
+    expect{ click_button("Create Secret")}.not_to change(Secret, :count)
+    expect(page).to have_content("Title can't be blank")
+    expect(current_path).to eq('/secrets')
+  end
+
+  scenario 'non-signed-in user cannot create a secret' do
+    click_link("New Secret")
+    expect(current_path).to eq('/session/new')
+  end
+
+  scenario 'signed-in user can edit their secret' do
+    sign_in
+    expect(page).to have_content("New Secret")
+    click_link("New Secret")
+    expect(page).to have_content("New secret")
+    fill_in("Title", :with => "Secret title")
+    fill_in("Body", :with => "Secret body")
+    click_button("Create Secret")
+    click_link("Edit")
+    fill_in("Title", :with => "Edited title")
+    click_button("Update Secret")
+    expect(page).to have_content("Edited title")
+  end
+
+  scenario 'signed-in user cannot edit other users secrets' do
+    click_link("All Users")
+    click_link("New User")
+    fill_in("Name", :with => "Foo")
+    fill_in("Email", :with => "foo2@email.com")
+    fill_in("Password", :with => "12345678")
+    fill_in("Password confirmation", :with => "12345678")
+    click_button("Create User")
+    click_link("All Secrets")
+    click_link("New Secret")
+    expect(page).to have_content("New secret")
+    fill_in("Title", :with => "Secret title")
+    fill_in("Body", :with => "Secret body")
+    click_button("Create Secret")
+    click_link("Logout")
+    sign_up
+    click_button("Create User")
+    click_link("All Secrets")
+    expect(page).to_not have_content("Edit")
+    click_link("Show")
+    expect(page).to_not have_content("Edit")
+  end
+
+
+  scenario 'non-signed-in user cannot edit secrets' do
+    sign_in
+    expect(page).to have_content("New Secret")
+    click_link("New Secret")
+    expect(page).to have_content("New secret")
+    fill_in("Title", :with => "Secret title")
+    fill_in("Body", :with => "Secret body")
+    click_button("Create Secret")
+    click_link("Logout")
+    visit(edit_secret_path(1))
+    expect(current_path).to eq('/session/new')
+  end
+
+
+
 
 
 end
