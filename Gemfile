@@ -36,12 +36,9 @@ gem 'bcrypt', '~> 3.1.7'
 group :test do
   gem 'capybara'
   gem 'launchy'
+  gem 'database_cleaner'
 end
 
-group :development, :test do
-  gem 'rspec-rails'
-  gem 'factory_girl_rails', '~> 4.0.0'
-end
 
 
 group :development do
