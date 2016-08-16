@@ -39,40 +39,94 @@ feature 'User sign in' do
 
   let(:user){ create(:user) }
 
-  before do
-    visit new_session_path
-    fill_in "Email", with: user.email
-    fill_in "Password", with: user.password
+  # Happy path.
+  context "when the user inputs valid login credentials" do
+    before do
+      visit new_session_path
+      fill_in "Email", with: user.email
+      fill_in "Password", with: user.password
 
-    click_button "Log in"
+      click_button "Log in"
+    end
+
+    specify "the user can sign in from the sign in path" do 
+      expect(page).to have_content("Welcome, #{user.name}!")
+    end
+
+    specify "a signed in user can create a new secret" do
+      click_on "New Secret"
+
+      expect(page).to have_content("New secret")
+    end
+
+    specify "a signed in user can edit an exisitng secret" do
+      user.secrets.create(attributes_for(:secret))
+
+      click_on "All Secrets"
+      click_on "Edit"
+      
+
+      expect(page).to have_content("Editing secret")
+    end
+
+    specify "a signed in user can delete an exisitng secret" do
+      user.secrets.create(attributes_for(:secret))
+
+      click_on "All Secrets"
+      
+
+      expect{ click_on "Destroy" }.to change(Secret, :count).by(-1)
+    end
+
+    specify "a signed in user can see the author of a secret" do
+      other_user = create(:user)
+      user.secrets.create(attributes_for(:secret))
+      other_user.secrets.create(attributes_for(:secret))
+      click_on "All Secrets"
+      save_and_open_page
+      
+      expect(page).to have_content(other_user.name)
+    end
+
   end
 
-  specify "the user can sign in from the sign in path" do 
-    expect(page).to have_content("Welcome, #{user.name}!")
-  end
+  # Sad path.
+  context "when the user does not input valid login credentials" do
+    before do
+      visit new_session_path
+      fill_in "Email", with: "dasda"
+      fill_in "Password", with: "some password"
+    end
 
-  specify "a signed in user can create a new secret" do
-    click_on "New Secret"
+    specify "the user can't sign in from the sign in path" do 
+      click_button "Log in"
+      expect(page).to have_field("Email")
+      expect(page).to have_field("Password")
+    end
 
-    expect(page).to have_content("New secret")
-  end
+    specify "the user can't create a new secret" do 
+      visit new_secret_path
+      expect(page).to have_field("Email")
+      expect(page).to have_field("Password")
+    end
 
-  specify "a signed in user can edit an exisitng secret" do
-    user.secrets.create(attributes_for(:secret))
+    specify "the user can't edit an existing secret" do
+      user.secrets.create(attributes_for(:secret))
 
-    click_on "All Secrets"
-    click_on "Edit"
-    
+      visit edit_secret_path(user.secrets.first)
+      
+      expect(page).to have_field("Email")
+      expect(page).to have_field("Password")
+    end
 
-    expect(page).to have_content("Editing secret")
-  end
+    specify "the user can't delete an exisitng secret" do
+      user.secrets.create(attributes_for(:secret))
 
-  specify "a signed in user can edit an exisitng secret" do
-    user.secrets.create(attributes_for(:secret))
+      click_on "All Secrets"
 
-    click_on "All Secrets"
+      expect(page).to_not have_content("Destroy")
+    end
 
-    expect{ click_on "Destroy" }.to change(Secret, :count).by(-1)
   end
 
 end
