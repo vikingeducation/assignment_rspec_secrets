@@ -1,53 +1,57 @@
 require 'rails_helper'
 
-describe 'Secret' do
-    let(:secret) { build(:secret) }
+describe Secret do
 
-  # Validations
-    it "is valid with default attributes" do
-      expect(secret).to be_valid
-    end
+  let(:secret){ build(:secret) }
 
-    it "saves with default attributes" do
-      expect{ secret.save }.to_not raise_error
-    end
-
-    it "is not valid if title is empty/nil" do
-      new_secret = build(:secret, title: nil)
-      expect(new_secret.valid?).to eq(false)
-    end
-
-    it "is not vaild if title length is greater than 24 or less than 4" do
-      new_secret1 = build(:secret, :title => "a" * 25)
-      expect(new_secret1.valid?).to eq(false)
-      new_secret2 = build(:secret, :title => "a" * 3)
-      expect(new_secret2.valid?).to eq(false)
-    end
-
-    it "is not vaild if body length is greater than 140 or less than 4" do
-     new_secret1 = build(:secret, :body => "a" * 141)
-      expect(new_secret1.valid?).to eq(false)
-      new_secret2 = build(:secret, :body => "a" * 3)
-      expect(new_secret2.valid?).to eq(false)
-    end
-
-  # Associations
-  it "responds to author" do
-    expect{ secret.author }.to_not raise_error
+  it 'with a title, body, and author is valid' do
+    expect(secret).to be_valid
   end
 
-  # Methods
-  describe "#last_five" do
-    before { create_list(:secret, 10) }
-    it "returns five secrets" do
+  it 'without a title is invalid' do
+    new_secret = build(:secret, title: nil)
+    expect(new_secret).not_to be_valid
+  end
 
+  it 'without a body is invalid' do
+    new_secret = build(:secret, body: nil)
+    expect(new_secret).not_to be_valid
+  end
 
-      expect(Secret.last_five.count).to eq(5)
+  it 'without an author is invalid' do
+    new_secret = build(:secret, author: nil)
+    expect(new_secret).not_to be_valid
+  end
+
+  context "validation of attributes" do
+    it 'does not allow a title of length < 4' do
+        new_secret = build(:secret, title: "a"*3)
+        expect(new_secret).not_to be_valid
     end
 
-    it "orders in secrets in descending order by id" do
-      ids = Secret.last_five.pluck(:id)
-      expect(Secret.pluck(:id).sort.reverse[0..4]).to eq(ids)
+    it 'does not allow a title of length > 24' do
+        new_secret = build(:secret, title: "a"*25)
+        expect(new_secret).not_to be_valid
+    end
+
+    it 'does not allow a body of length < 4' do
+        new_secret = build(:secret, body: "a"*3)
+        expect(new_secret).not_to be_valid
+    end
+
+    it 'does not allow a title of length > 140' do
+        new_secret = build(:secret, title: "a"*141)
+        expect(new_secret).not_to be_valid
     end
   end
+
+  context "model methods" do
+
+    it 'retrieves the last five created secrets' do
+      first_secret = create(:secret)
+      last_five_secrets = create_list(:secret, 5)
+      expect(Secret.last_five).to match_array(last_five_secrets)
+    end
+  end
+
 end
