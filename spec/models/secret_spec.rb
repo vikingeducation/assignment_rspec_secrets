@@ -22,9 +22,6 @@ describe Secret do
 
   describe "#last_five" do
     let!(:secrets){create_list(:secret, 5)}
-    # before do
-    #   secrets = create_list(:secret, 5)
-    # end
     it "returns 5 secrets" do
       expect(Secret.last_five.count).to eq(5)
     end
