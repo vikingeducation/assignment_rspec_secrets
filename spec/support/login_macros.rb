@@ -18,5 +18,6 @@ module LoginMacros
     fill_in 'Password', with: user.password
     fill_in 'Password confirmation', with: user.password
   end
+#
 
 end
