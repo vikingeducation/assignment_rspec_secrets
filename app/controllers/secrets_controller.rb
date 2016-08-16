@@ -1,6 +1,7 @@
 class SecretsController < ApplicationController
   before_action :set_secret, only: [:edit, :update, :destroy]
   skip_before_action :require_login, :only => [:index, :show]
+  #before_action :require_current_user, :only => [:edit, :update, :destroy]
 
   # GET /secrets
   # GET /secrets.json
