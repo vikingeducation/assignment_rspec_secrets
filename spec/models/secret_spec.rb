@@ -51,10 +51,6 @@ describe Secret do
       expect(secret).to respond_to(:author)
     end
 
-    it "has one author" do 
-      is_expected.to belong_to(:author)
-    end
-
     it "an author to be associated with a specific secret" do
       secret.author = user
       expect(secret).to be_valid
@@ -73,14 +69,6 @@ describe Secret do
       end
       expect(Secret.last_five.count).to eq(5)
     end
-
-    it "returns only two secrets if there are only two" do 
-      2.times do 
-        create(:secret)
-      end
-       expect(Secret.last_five.count).to eq(2)
-     end
-
   end
 
 end
