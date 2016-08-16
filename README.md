@@ -1,4 +1,0 @@
-demo_secrets
-============
-
-Shhhhh....
