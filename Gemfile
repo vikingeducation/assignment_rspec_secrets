@@ -33,9 +33,21 @@ gem 'spring',        group: :development
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+group :test do
+  gem 'capybara'
+  gem 'launchy'
+end
+
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails', '~> 4.0.0'
+end
+
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'guard-rspec', require: false
 end
 
 
@@ -55,4 +67,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-

@@ -6,10 +6,14 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'spec_helper'
 require 'rspec/rails'
 require 'factory_girl_rails'
+<<<<<<< HEAD
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 end
+=======
+require 'capybara/rails'
+>>>>>>> 51eac85445bb119f6b889bafe978b30664ff9edd
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -34,7 +38,12 @@ ActiveRecord::Migration.maintain_test_schema!
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
+<<<<<<< HEAD
 
+=======
+  config.include FactoryGirl::Syntax::Methods
+  config.include LoginMacros
+>>>>>>> 51eac85445bb119f6b889bafe978b30664ff9edd
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
