@@ -37,6 +37,11 @@ group :development, :test do
   gem 'factory_girl_rails', '~> 4.0.0'
 end
 
+group :test do
+  gem 'capybara'
+  gem 'launchy'
+end
+
 
 group :development do
   gem 'better_errors'
