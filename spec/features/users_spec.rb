@@ -163,7 +163,39 @@ feature 'using user accounts' do
     expect(current_path).to eq('/session/new')
   end
 
+  scenario 'signed-in user can delete their own secrets' do
+    sign_in
+    click_link("New Secret")
+    fill_in("Title", :with => "Secret title")
+    fill_in("Body", :with => "Secret body")
+    click_button("Create Secret")
+    click_link("All Secrets")
+    expect{ click_link("Destroy") }.to change(Secret, :count).from(1).to(0)
+    expect(current_path).to eq('/secrets')
+  end
 
+  scenario 'signed-in user cannot delete other users\' secrets' do
+    click_link("All Users")
+    click_link("New User")
+    fill_in("Name", :with => "Foo")
+    fill_in("Email", :with => "foo2@email.com")
+    fill_in("Password", :with => "12345678")
+    fill_in("Password confirmation", :with => "12345678")
+    click_button("Create User")
+    click_link("All Secrets")
+    click_link("New Secret")
+    expect(page).to have_content("New secret")
+    fill_in("Title", :with => "Secret title")
+    fill_in("Body", :with => "Secret body")
+    click_button("Create Secret")
+    click_link("Logout")
+    sign_up
+    click_button("Create User")
+    click_link("All Secrets")
+    expect(page).to_not have_content("Destroy")
+    click_link("Show")
+    expect(page).to_not have_content("Destroy")
+  end
 
 
 
