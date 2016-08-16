@@ -67,4 +67,12 @@ feature 'User sign in' do
     expect(page).to have_content("Editing secret")
   end
 
+  specify "a signed in user can edit an exisitng secret" do
+    user.secrets.create(attributes_for(:secret))
+
+    click_on "All Secrets"
+
+    expect{ click_on "Destroy" }.to change(Secret, :count).by(-1)
+  end
+
 end
