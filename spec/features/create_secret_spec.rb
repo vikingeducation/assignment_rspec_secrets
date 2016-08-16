@@ -13,5 +13,8 @@ feature 'as a signed in user want to create a secret' do
     expect(Secret.count).to eq(old_num_secrets + 1)
   end
 
-  scenario 'create secret without being logged in'
+  scenario 'create secret without being logged in' do
+    visit root_path
+    expect(page).to_not have_content('Create Secret')
+  end
 end
