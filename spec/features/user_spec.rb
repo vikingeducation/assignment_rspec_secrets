@@ -24,14 +24,14 @@ feature 'Visitor Accounts' do
   end
 
   scenario "is unable to view another user's show page" do
-    user = create(:user)
+    create(:user)
     click_on "All Users"
     click_on "Show"
     expect(current_path).to eql(new_session_path)
   end
 
   scenario "is unable to destroy a user" do
-    user = create(:user)
+    create(:user)
     click_on "All Users"
     expect { click_on "Destroy" }.to change(User, :count).by(0)
     expect(current_path).to eql(new_session_path)
@@ -115,14 +115,30 @@ feature "Signed In Users" do
   end
 
   scenario "is unable to destroy another user" do
-    user2 = create(:user)
+    user = create(:user)
     click_on "All Users"
 
-    within("tr", text: @user.email) do
+    within("tr", text: user.email) do
       expect { click_on "Destroy" }.to change(User, :count).by(0)
     end
 
-    expect(current_path).to eql(new_session_path)
+    expect(current_path).to eql(root_path)
   end
+
+  scenario "is able to see the authors of secrets" do
+    secret = create(:secret)
+    visit root_path
+
+    expect(page).to_not have_content("**hidden**")
+    expect(page).to have_content(secret.author.name)
+  end
+
+  scenario "is able to logout" do
+    click_on "Logout"
+    expect(current_path).to eq(root_path)
+    expect(page).to_not have_content(@user.name)
+    expect(page).to have_content("Login")
+  end
+
 
 end
