@@ -15,7 +15,7 @@ feature 'Secrets' do
     scenario "sign up" do
       fill_in_signup(author)
       expect(page).to have_content('User was successfully created')
-    end
+    endl
 
     scenario "to sign in to my account" do
       author.save!
