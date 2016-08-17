@@ -8,6 +8,9 @@ FactoryGirl.define do
     end
 
     trait :without_attributes do
+      name ""
+      email ""
+      password ""
     end
 
   end
