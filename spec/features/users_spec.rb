@@ -19,7 +19,6 @@ feature 'User' do
     fill_in "Email", with: "abc@abc.com"
     fill_in "Password", with: "asdfasdf"
     fill_in "Password confirmation", with: "asdfasdf"
-
     expect{ click_button "Create User" }.to change(User, :count).by(1)
     expect(page).to have_content "Welcome, Johnny!"
     expect(page).to have_content "User was successfully created."
