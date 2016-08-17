@@ -2,8 +2,9 @@ require 'rails_helper'
 
 describe UsersController do
 
+  let(:user) { build(:user) }
+
   describe 'User creation' do
-    let(:user) { build(:user) }
 
     describe 'post/create' do
       it 'creates a user when given valid attributes' do
@@ -19,4 +20,14 @@ describe UsersController do
       end
     end
   end
+
+  describe 'get/edit' do
+    it 'assigns the correct instace variable' do
+      user.save
+      session[:user_id] = user.id
+      get :edit, id: user.id
+      expect(assigns(:user)).to eq(user)
+    end
+  end
+
 end
