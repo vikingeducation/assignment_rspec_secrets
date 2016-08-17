@@ -36,19 +36,10 @@ group :test do
 
   gem 'shoulda-matchers', '~> 3.1'
 end
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'guard-rspec', require: false
-end
-
-
-group :development, :test do
-  gem 'factory_girl_rails', '~> 4.0'
-  gem 'rspec-rails'
-end
-
-group :development do
   gem 'guard-rspec', require: false
 end
 # Use unicorn as the app server
