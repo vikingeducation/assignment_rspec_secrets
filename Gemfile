@@ -14,7 +14,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
-
 # allow pry debugging
 gem 'pry-byebug'
 
@@ -34,13 +33,9 @@ gem 'spring',        group: :development
 gem 'bcrypt', '~> 3.1.7'
 
 group :test do
-  gem 'capybara'
-  gem 'launchy'
-  gem 'database_cleaner'
+
+  gem 'shoulda-matchers', '~> 3.1'
 end
-
-
-
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -64,3 +59,11 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+
+group :development, :test do 
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+  gem 'capybara'
+  gem 'launchy'
+end

@@ -3,49 +3,51 @@ require 'rails_helper'
 describe User do
 
   let(:user){ build(:user) }
+  let(:bad_email_user){ build(:user, :email => "") }
+  let(:bad_password_user){ build(:user, :password => "") }
+  let(:no_name_user){ build(:user, :name => "") }
+  let(:second_user){ build(:user) }
+  let(:secret){build(:secret)}
 
-  it "builds a valid user" do
+
+  it "is valid with default attributes" do
     expect(user).to be_valid
   end
 
-  it "saves properly" do
-    expect{ user.save! }.not_to raise_error
+  it "is invalid with no email" do
+    expect(bad_email_user).not_to be_valid
   end
 
+  it {is_expected.to validate_uniqueness_of(:email)}
 
-
-  it "validates email" do
-    user = build(:user, email: "")
-    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  it "is invalid with no password" do 
+    expect(bad_password_user).not_to be_valid
   end
 
-  it "validates name" do
-    user = build(:user, name: "")
-    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  it "is invalid with no name" do
+    expect(no_name_user).not_to be_valid
   end
 
-  it "validates name length" do
-    user = build(:user, name: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
-    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it "validates password" do
-    user = build(:user, password: "")
-    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it "responds to secret" do
+  it "has a 'secrets' method" do
     expect(user).to respond_to(:secrets)
   end
 
-  let(:num_secrets){3}
-  before do
-    user.secrets = create_list(:secret, num_secrets)
-    user.save!
-  end
-  it "returns the number of a User's secrets" do
-    expect(user.secrets.count).to eq(num_secrets)
+  describe "User association with secrets" do
+
+    it "a valid user can become a secret's author" do
+      secret.author = user
+      expect(secret).to be_valid
+    end
+
+    it "does not allow a non-existent user to become a secret's author" do
+      secret.author_id = 1234
+      expect(secret).to_not be_valid
+    end
+
+
+
   end
 
+  it { is_expected.to have_secure_password }
 
 end
