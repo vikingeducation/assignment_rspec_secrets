@@ -1,5 +1,5 @@
 class SecretsController < ApplicationController
-  before_action :set_secret, only: [:edit, :update, :destroy]
+  before_action :set_secret, only: [:update, :destroy]
   skip_before_action :require_login, :only => [:index, :show]
 
   # GET /secrets
@@ -21,6 +21,7 @@ class SecretsController < ApplicationController
 
   # GET /secrets/1/edit
   def edit
+    @secret = current_user.secrets.find(params[:id])
   end
 
   # POST /secrets
@@ -65,7 +66,7 @@ class SecretsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    # In this case, we will (intentionally) get an error if 
+    # In this case, we will (intentionally) get an error if
     #   the secret you're trying to access doesn't belong to you
     # In real world scenarios, we'd be more likely to set a
     #   flash message and redirect with a proper error code here
