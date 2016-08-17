@@ -3,12 +3,8 @@ require 'rails_helper'
 describe UsersController do
   let(:user){create(:user)}
 
-  before :each do
-    session[:user_id] = user.id
-  end
 
   describe 'POST #create' do
-    
 
     it "actually creates the user" do
       expect{
@@ -22,4 +18,6 @@ describe UsersController do
         }.to change(User, :count).by(0)
     end
   end
+
+  
 end 
