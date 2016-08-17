@@ -19,5 +19,15 @@ describe UsersController do
     end
   end
 
-  
+  describe "GET #edit" do 
+    before do 
+      user
+      session[:user_id] = user.id
+    end
+    it "grabs the right user" do 
+      get :edit, id: user.id
+      expect(assigns(:user)).to eq(user)
+    end
+  end
+
 end 

@@ -14,7 +14,7 @@ describe SecretsController do
   end
 
   
-  #happy
+  # HAPPY
   context "logged in as user" do 
     before :each do 
       session[:user_id] = user.id
@@ -25,6 +25,12 @@ describe SecretsController do
         get :edit, id: secret.id
         expect(response).to render_template :edit
       end
+
+      it "sets the right instance variables" do
+        get :edit, id: secret.id
+        expect(assigns(:secret)).to eq(secret)
+      end
+
     end
 
     describe "PATCH #update" do 
@@ -68,6 +74,29 @@ describe SecretsController do
         expect(response).to redirect_to secrets_path
       end
     end
+
+    describe "POST #create" do
+
+      context "with proper attributes" do 
+
+        it "creates a new secret" do 
+          expect do 
+            post :create, secret: attributes_for(:secret)
+          end.to change(Secret, :count).by(1)
+        end
+
+        it "redirects to new secret" do 
+          post :create, secret: attributes_for(:secret)
+          expect(response).to redirect_to("http://test.host/secrets/1")
+        end
+
+        it "sets a flash message" do
+          post :create, secret: attributes_for(:secret)
+          assert_equal flash[:notice], "Secret was successfully created." 
+        end
+
+      end
+    end
   end
 
   #sad
@@ -102,20 +131,15 @@ describe SecretsController do
       end
     end
 
-    # describe "DELETE #destroy" do 
-    #   before { secret }
+    describe "DELETE #destroy" do 
+      before { secret }
 
-    #   it "destroys the secret" do
-    #     expect{
-    #       delete :destroy, id: secret.id
-    #       }.to change(Secret, :count).by(-1)
-    #   end
-
-    #   it "redirects to the root" do
-    #     delete :destroy, id: secret.id
-    #     expect(response).to redirect_to secrets_path
-    #   end
-    # end
+      it "doesn't destroy the secret" do
+        expect{
+          delete :destroy, id: secret.id
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 end
 
