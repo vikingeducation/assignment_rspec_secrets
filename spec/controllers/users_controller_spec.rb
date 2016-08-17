@@ -21,52 +21,27 @@ describe UsersController do
   end
 
   context "signed in user" do
-
+    let(:user) { create(:user) }
+    let(:another_user){create(:user)}
     before :each do
       session[:user_id] = user.id
       user
     end
 
-    context "user has a secret" do
-
-      let(:another_user){create(:user)}
-      let(:user_secret){create(:secret, author: user)}
-      let(:other_secret){create(:secret, author: another_user)}
-
-      describe "GET #edit" do 
-
-        describe "edit a secret" do
-          it "is able to edit a secret that belongs to them" do
-            get :edit, :id => user_secret.id
-            expect(assigns(:secret)).to eq(user_secret)
-          end
-          
-          it "is unable to edit a secret that belongs to another" do
-            get :edit, :id => other_secret.id
-            expect(assigns(:secret)).to eq(nil)
-          end
-
-        end
-
-      end
-
-      describe "destroy a secret that belongs to user" do
-        it "is able to destroy a secret that belongs to them" do
-        end
-        it "is unable to destroy a secret that belongs to another" do
-        end
-      end
-
-    end
-
     describe "edit a user that is theirs" do
       it "is able to edit a user that is them" do
+        get :edit, :id => user.id
+        expect(response).to render_template :edit
       end
       it "is unable to edit a user that is another" do
+        get :edit, :id => another_user.id
+        expect(response).to redirect_to(root_path)
       end
     end
     describe "destroy a user that is theirs" do
       it "is able to destroy a user that is them" do
+        expect{ delete :destroy, :id => user.id }.to change(User, :count).by(-1)
+        expect(response).to redirect_to(secrets_path)
       end
       it "is unable to destroy a user that is another" do
       end
