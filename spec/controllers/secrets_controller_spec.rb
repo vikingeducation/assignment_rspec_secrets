@@ -2,30 +2,55 @@ require 'rails_helper'
 
 describe SecretsController do
 
+  let(:user) { create(:user) }
+  let(:user_secret){create(:secret, author: user)}
+
   describe 'secrets access' do
-    let(:secret) { create(:secret) }
 
     describe 'GET #show' do
 
       it "sets the correct instance variable" do
 
-        get :show, id: secret.id
-        expect(assigns(:secret)).to eq(secret)
+        get :show, id: user_secret.id
+        expect(assigns(:secret)).to eq(user_secret)
       end
     end
   end
 
   context "signed in user" do
-    let(:user) { create(:user) }
+
+
     before :each do
       session[:user_id] = user.id
       user
     end
 
+    context "user wants to create a secret" do
+
+      describe "GET #create" do
+
+        it "is able to create a new secret when user is logged in" do
+          expect {post :create, :secret => attributes_for(:secret)}.to change(Secret, :count).by(1)
+          expect(response).to redirect_to secret_path(assigns(:secret))
+        end
+
+        describe "user creates a secret" do
+
+          before do
+            post :create, :secret => attributes_for(:secret)
+          end
+
+          it { should set_flash[:notice]}
+
+        end
+
+      end
+
+    end
+
     context "user has a secret" do
 
       let(:another_user){create(:user)}
-      let(:user_secret){create(:secret, author: user)}
       let(:other_secret){create(:secret, author: another_user)}
 
 
