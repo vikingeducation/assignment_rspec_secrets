@@ -1,4 +1,3 @@
-#Hey
 FactoryGirl.define do
 
   factory :user do

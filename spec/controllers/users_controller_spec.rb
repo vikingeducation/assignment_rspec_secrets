@@ -24,10 +24,6 @@ describe UsersController do
       expect(response).to render_template :edit
     end
 
-    it "authorized user can delete own secret" do
-      expect{delete :destroy, id: secret.id}.to change(Secret, :count).by(-1)
-    end
-
   end
 
 
