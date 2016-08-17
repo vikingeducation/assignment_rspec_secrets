@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.6'
 # Use sqlite3 as the database for Active Record
@@ -13,7 +14,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
-
 # allow pry debugging
 gem 'pry-byebug'
 
@@ -32,11 +32,16 @@ gem 'spring',        group: :development
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+group :test do
+
+  gem 'shoulda-matchers', '~> 3.1'
+end
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'guard-rspec', require: false
 end
-
 # Use unicorn as the app server
 # gem 'unicorn'
 
@@ -46,3 +51,10 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+
+group :development, :test do 
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+  gem 'capybara'
+  gem 'launchy'
+end
