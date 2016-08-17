@@ -53,12 +53,20 @@ describe SecretsController do
       let(:another_user){create(:user)}
       let(:other_secret){create(:secret, author: another_user)}
 
-
       describe "GET #edit" do
-        it "is able to edit a secret that belongs to them" do
-          get :edit, :id => user_secret.id
-          expect(response).to render_template :edit
+
+        describe "editing the current user" do
+          before { get :edit, :id => user_secret.id }
+
+          it "is able to edit a secret that belongs to them" do
+            expect(response).to render_template :edit
+          end
+
+          it "sets the proper instance variable" do
+            expect(assigns(:secret)).to eq(user_secret)
+          end
         end
+
 
         it "is unable to edit a secret that belongs to another" do
           expect{ get :edit, :id => other_secret.id }.to raise_error(ActiveRecord::RecordNotFound)

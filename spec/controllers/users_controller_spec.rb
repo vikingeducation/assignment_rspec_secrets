@@ -30,20 +30,32 @@ describe UsersController do
     end
 
     describe "edit a user that is theirs" do
-      it "is able to edit a user that is them" do
-        get :edit, :id => user.id
-        expect(response).to render_template :edit
+
+      describe "is editing user details" do
+        before { get :edit, :id => user.id }
+
+        it "is redirected to edit template" do
+          expect(response).to render_template :edit
+        end
+
+        it "sets proper instance varaible" do
+          expect(assigns(:user)).to eq(user)
+        end
       end
+
       it "is unable to edit a user that is another" do
         get :edit, :id => another_user.id
         expect(response).to redirect_to(root_path)
       end
     end
+
     describe "destroy a user that is theirs" do
+
       it "is able to destroy a user that is them" do
         expect{ delete :destroy, :id => user.id }.to change(User, :count).by(-1)
         expect(response).to redirect_to(users_path)
       end
+
       it "is unable to destroy a user that is another" do
         expect{ delete :destroy, :id => another_user.id }.to change(User, :count).by(0)
         expect(response).to redirect_to(root_url)
