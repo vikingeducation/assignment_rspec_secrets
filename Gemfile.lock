@@ -194,6 +194,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   factory_girl_rails
   faker
+  guard
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
