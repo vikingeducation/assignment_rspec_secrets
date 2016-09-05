@@ -101,7 +101,7 @@ feature "Secrets" do
 
       click_link "Destroy"
       expect(page).to have_content "Listing secrets"
-
+ 
     end
 
   end
