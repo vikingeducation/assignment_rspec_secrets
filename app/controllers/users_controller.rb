@@ -59,7 +59,7 @@ class UsersController < ApplicationController
   def destroy
     respond_to do |format|
       if @user.destroy
-        sign_out
+        sign_out #<<<<<< sign out the user after destroy
         format.html { redirect_to new_session_path, notice: 'User was successfully destroyed.' }
         format.json { head :no_content }
       else

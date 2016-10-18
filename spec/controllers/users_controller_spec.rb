@@ -10,7 +10,7 @@ describe UsersController do
   describe 'GET #index' do
     it 'sets an instance variable to all users' do
       users
-      get :index
+      process :index
       expect(assigns(:users).map(&:id)).to eq(users.map(&:id))
     end
   end
@@ -21,12 +21,12 @@ describe UsersController do
   describe 'GET #show' do
     it 'sets an instance variable to the desired user when user is authorized' do
       login(user)
-      get :show, :id => user.id
+      process :show, params: { :id => user.id }
       expect(assigns(:user).id).to eq(user.id)
     end
 
     it 'redirects to login when user is not authorized' do
-      get :show, :id => user.id
+      process :show, params: { :id => user.id }
       expect(response).to redirect_to new_session_path
     end
   end
@@ -36,7 +36,7 @@ describe UsersController do
   # ----------------------------------------
   describe 'GET #new' do
     it 'sets an instance variable to an empty unpersisted user' do
-      get :new
+      process :new
       expect(assigns(:user)).to_not be_persisted
     end
   end
@@ -46,23 +46,27 @@ describe UsersController do
   # ----------------------------------------
   describe 'POST #create' do
     let(:post_create_user) do
-      post :create, :user => attributes_for(
-        :user,
-        :name => 'Foobar',
-        :email => 'foo@bar.com',
-        :password => 'password',
-        :password_confirmation => 'password'
-      )
+      process :create, params: {
+        :user => attributes_for(
+          :user,
+          :name => 'Foobar',
+          :email => 'foo@bar.com',
+          :password => 'password',
+          :password_confirmation => 'password'
+        )
+      }
     end
 
     let(:post_create_invalid) do
-      post :create, :user => attributes_for(
-        :user,
-        :name => '',
-        :email => '',
-        :password => '',
-        :password_confirmation => ''
-      )
+      process :create, params: {
+        :user => attributes_for(
+          :user,
+          :name => '',
+          :email => '',
+          :password => '',
+          :password_confirmation => ''
+        )
+      }
     end
 
     context 'the submitted data is valid' do
@@ -98,14 +102,14 @@ describe UsersController do
   describe 'GET #edit' do
     it 'sets an instance variable to the desired persisted user when authorized' do
       login(user)
-      get :edit, :id => user.id
+      process :edit, params: { :id => user.id }
       expect(assigns(:user).id).to eq(user.id)
     end
 
     it 'redirects when not authorized' do
       user = users.first
       login(user)
-      get :edit, :id => users.last.id
+      process :edit, params: { :id => users.last.id }
       expect(response).to redirect_to root_path
     end
   end
@@ -115,23 +119,27 @@ describe UsersController do
   # ----------------------------------------
   describe 'PUT/PATCH #update' do
     let(:patch_update_user) do
-      patch :update,  :id => user.id,
-                      :user => attributes_for(
-                        :user,
-                        :name => 'Foobar',
-                        :email => 'foo@bar.com',
-                        :password => 'password',
-                        :password_confirmation => 'password'
-                      )
+      process :update, params: {
+        :id => user.id,
+        :user => attributes_for(
+          :user,
+          :name => 'Foobar',
+          :email => 'foo@bar.com',
+          :password => 'password',
+          :password_confirmation => 'password'
+        )
+      }
     end
 
     let(:patch_update_invalid) do
-      patch :update,  :id => user.id,
-                      :user => attributes_for(
-                        :user,
-                        :name => '',
-                        :email => ''
-                      )
+      process :update, params: {
+        :id => user.id,
+        :user => attributes_for(
+          :user,
+          :name => '',
+          :email => ''
+        )
+      }
     end
 
     before do
@@ -175,8 +183,8 @@ describe UsersController do
   # DELETE #destroy
   # ----------------------------------------
   describe 'DELETE #destroy' do
-    let(:delete_destroy_user){delete :destroy, :id => user.id}
-    let(:delete_destroy_other_user){delete :destroy, :id => users.first.id}
+    let(:delete_destroy_user){ process :destroy, params: { :id => user.id } }
+    let(:delete_destroy_other_user){ process :destroy, params: { :id => users.first.id } }
 
     before do
       login(user)

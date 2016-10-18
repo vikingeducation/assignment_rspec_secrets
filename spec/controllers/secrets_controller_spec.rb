@@ -15,7 +15,7 @@ describe SecretsController do
   describe 'GET #index' do
     it 'sets an instance variable to all secrets' do
       secrets
-      get :index
+      process :index
       expect(assigns(:secrets).map(&:id)).to eq(secrets.map(&:id))
     end
   end
@@ -25,7 +25,7 @@ describe SecretsController do
   # ----------------------------------------
   describe 'GET #show' do
     it 'sets an instance variable to the desired secret' do
-      get :show, :id => secret.id
+      process :show, params: { :id => secret.id }
       expect(assigns(:secret)).to eq(secret)
     end
   end
@@ -36,7 +36,7 @@ describe SecretsController do
   describe 'GET #new' do
     context 'the user is logged in' do
       it 'sets an instance variable to an empty unpersisted secret' do
-        get :new
+        process :new
         expect(assigns(:secret).persisted?).to eq(false)
       end
     end
@@ -44,7 +44,7 @@ describe SecretsController do
     context 'the user is logged out' do
       it 'redirects to the login path' do
         logout
-        get :new
+        process :new
         expect(response).to redirect_to new_session_path
       end
     end
@@ -55,21 +55,25 @@ describe SecretsController do
   # ----------------------------------------
   describe 'POST #create' do
     let(:post_create_secret) do
-      post :create, :id => user.id,
-                    :secret => attributes_for(
-                      :secret,
-                      :title => 'title',
-                      :body => 'body'
-                    )
+      process :create, params: {
+        :id => user.id,
+        :secret => attributes_for(
+          :secret,
+          :title => 'title',
+          :body => 'body'
+        )
+      }
     end
 
     let(:post_create_invalid) do
-      post :create, :id => user.id,
-                    :secret => attributes_for(
-                      :secret,
-                      :title => '',
-                      :body => ''
-                    )
+      process :create, params: {
+        :id => user.id,
+        :secret => attributes_for(
+          :secret,
+          :title => '',
+          :body => ''
+        )
+      }
     end
 
     it 'redirects when user is not authorized' do
@@ -117,7 +121,7 @@ describe SecretsController do
   # ----------------------------------------
   describe 'GET #edit' do
     it 'sets an instance variable to the desired persisted secret' do
-      get :edit, :id => secret.id
+      process :edit, params: { :id => secret.id }
       expect(assigns(:secret)).to eq(secret)
     end
   end
@@ -127,21 +131,25 @@ describe SecretsController do
   # ----------------------------------------
   describe 'PUT/PATCH #update' do
     let(:patch_upate_secret) do
-      patch :update,  :id => user.id,
-                      :secret => attributes_for(
-                        :secret,
-                        :title => 'UPDATED!',
-                        :body => 'UPDATED!'
-                      )
+      process :update, params: {
+        :id => user.id,
+          :secret => attributes_for(
+            :secret,
+            :title => 'UPDATED!',
+            :body => 'UPDATED!'
+          )
+      }
     end
 
     let(:patch_upate_invalid) do
-      patch :update,  :id => user.id,
-                      :secret => attributes_for(
-                        :secret,
-                        :title => '',
-                        :body => ''
-                      )
+      process :update, params: {
+        :id => user.id,
+          :secret => attributes_for(
+            :secret,
+            :title => '',
+            :body => ''
+          )
+      }
     end
 
     before do
@@ -187,7 +195,7 @@ describe SecretsController do
   # DELETE #destroy
   # ----------------------------------------
   describe 'DELETE #destroy' do
-    let(:delete_destroy_secret){delete :destroy, :id => secret.id}
+    let(:delete_destroy_secret){ process :destroy, params: { :id => secret.id } }
 
     before do
       secret

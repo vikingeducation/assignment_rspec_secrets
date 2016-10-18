@@ -16,11 +16,11 @@ describe ApplicationController do
     before_action :require_current_user, :only => [:show]
 
     def index
-      render :text => 'Index'
+      render :plain => 'Index'
     end
 
     def show
-      render :text => 'Show'
+      render :plain => 'Show'
     end
   end
 
@@ -92,13 +92,13 @@ describe ApplicationController do
   # ----------------------------------------
   describe '#require_login' do
     it 'does nothing if the user is signed in' do
-      get :index
+      process :index
       expect(response).to_not redirect_to %r(.*)
     end
 
     it 'redirects if the user is not signed in' do
       controller.send(:sign_out)
-      get :index
+      process :index
       expect(response).to redirect_to new_session_path
     end
   end
@@ -108,12 +108,12 @@ describe ApplicationController do
   # ----------------------------------------
   describe '#require_current_user' do
     it 'does nothing if there is a current user' do
-      get :show, :id => user.id
+      process :show, params: { :id => user.id }
       expect(response).to_not redirect_to %r(.*)
     end
 
     it 'redirects if the current user is not authorized to perform the action' do
-      get :show, :id => '1234'
+      process :show, params: { :id => '1234' }
       expect(response).to redirect_to root_path
     end
   end

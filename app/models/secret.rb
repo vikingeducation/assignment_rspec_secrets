@@ -1,4 +1,4 @@
-class Secret < ActiveRecord::Base
+class Secret < ApplicationRecord
 
   belongs_to :author, :class_name => "User"
 

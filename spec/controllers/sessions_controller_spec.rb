@@ -13,8 +13,10 @@ describe SessionsController do
   describe 'POST #create' do
     context 'the credentials were valid' do
       before do
-        post :create, :email => user.email,
-                      :password => user.password
+        process :create, params: {
+          :email => user.email,
+          :password => user.password
+        }
       end
 
       it 'results in the user being signed into the session' do
@@ -28,8 +30,10 @@ describe SessionsController do
 
     context 'the credentials were invalid' do
       before do
-        post :create, :email => 'foo',
-                      :password => 'bar'
+        process :create, params: {
+          :email => 'foo',
+          :password => 'bar'
+        }
       end
 
       it 'does not sign in the user' do
@@ -47,9 +51,11 @@ describe SessionsController do
   # ----------------------------------------
   describe 'DELETE #destroy' do
     before do
-      post :create, :email => user.email,
-                    :password => user.password
-      delete :destroy
+      process :create, params: {
+        :email => user.email,
+        :password => user.password
+      }
+      process :destroy
     end
 
     it 'removes a signed in user from the session' do

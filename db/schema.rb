@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -13,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20141102235550) do
 
-  create_table "secrets", force: true do |t|
+  create_table "secrets", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
     t.integer  "author_id"
@@ -21,7 +20,7 @@ ActiveRecord::Schema.define(version: 20141102235550) do
     t.datetime "updated_at"
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
     t.string   "password_digest"
