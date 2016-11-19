@@ -13,9 +13,9 @@ User.delete_all
 
 puts 'Creating Users'
 10.times do |i|
-  User.create!( :name => "foo#{i}", 
-                :email => "foo#{i}@bar.com", 
-                :password => "foobar", 
+  User.create!( :name => "foo#{i}",
+                :email => "foo#{i}@bar.com",
+                :password => "foobar",
                 :password_confirmation => "foobar" )
 end
 users = User.all
