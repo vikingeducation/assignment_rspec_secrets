@@ -7,6 +7,10 @@ describe User do
     expect(user).to be_valid
   end
 
+  it "responds to secrets" do
+    expect(user).to respond_to(:secrets)
+  end
+
   it "saves with default values" do
     expect{ user.save! }.not_to raise_error
   end
