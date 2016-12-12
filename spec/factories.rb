@@ -6,7 +6,7 @@ FactoryGirl.define do
     password "bob123"
   end
 
-  factor :secret do
+  factory :secret do
     title "Secret Title"
     body "This is a secret body."
     author
