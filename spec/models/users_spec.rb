@@ -34,6 +34,7 @@ describe User do
     expect(User.reflect_on_association(:secrets).macro).to eq(:has_many)
   end
 
+  it { should have_many(:secrets) }
 
 end
 

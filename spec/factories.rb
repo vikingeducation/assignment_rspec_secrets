@@ -1,14 +1,14 @@
 FactoryGirl.define do
   factory :user do
-    name "foobarbaz"
+    sequence(:name) { |n| "user#{n}" }
     email {"#{name}@email.com"}
     password "password"
 
   end
 
-  factory :secrets do
+  factory :secret do
     title "Secret Title"
     body  "Foo Paragraph"
-    association :user
+    association :author, factory: :user
   end
 end
