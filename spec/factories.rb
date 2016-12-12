@@ -1,4 +1,4 @@
-FactoryGirl.define do 
+FactoryGirl.define do
 
   factory :secret do
     title "Secret Title!"
@@ -7,8 +7,12 @@ FactoryGirl.define do
   end
 
   factory :user, aliases: [:author] do
-    name "Person McPerson"
-    email "email@email.com"
+    sequence(:name){ |n| "Foo#{n}"}
+
+    # Don't forget to pass a BLOCK if you
+    #   are interpolating dynamic values:
+    email { "#{name}@bar.com" }
+
     password "foobar123"
   end
 

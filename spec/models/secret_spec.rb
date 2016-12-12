@@ -8,10 +8,31 @@ describe Secret do
     expect(secret).to be_valid
   end
 
+  it "is rejects secrets without body, title, or author" do
+    secret = create(:secret, title: "")
+    expect
+  end
+
   it "validates all its biz" do
     should validate_presence_of(:title)
     should validate_length_of(:title)
     should validate_length_of(:body)
+  end
+
+  it "belong to an author" do
+    should belong_to(:author)
+  end
+
+  describe ".last_five" do
+    it "returns the 5 most recent secrets" do
+      secret_list = create_list(:secret, 10)
+
+      expect( Secret.last_five.pluck(:id) ).to eq [10,9,8,7,6]
+    end
+
+    it "returns an empty array if there aren't any secrets" do
+      expect( Secret.last_five ).to eq []
+    end
   end
 
 end
