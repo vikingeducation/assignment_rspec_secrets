@@ -26,7 +26,7 @@ Shhhhh....
   * Can't have a password less than 6 or greater than 16
 
 * Bad Paths
-  * Trying to delete another user when logged in?
+  * Trying to delete another user when logged in? (more a controller thing)
 
 
 ## Secret
