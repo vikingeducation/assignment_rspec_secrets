@@ -50,7 +50,7 @@ describe Secret do
 
       it 'returns last 5 secrets' do
         secrets = create_list(:secret, num_secrets)
-        expect(Secret.last_five).expect include(secrets)
+        expect(Secret.last_five).to match_array(secrets)
       end
     end
   end
