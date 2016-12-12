@@ -33,7 +33,20 @@ describe User do
     end
   end
 
+  describe "email uniqueness" do
+    before do
+      user.save!
+    end
+    it "cannot save a user unless their email is unique" do
+      different_user = build(:user, email: user.email)
+      expect{different_user.save!}.to raise_error
+    end
+  end
 
-
+  describe "user associations" do
+    it "responds to a call to secrets association" do
+      expect(user).to respond_to :secrets
+    end
+  end
 
 end

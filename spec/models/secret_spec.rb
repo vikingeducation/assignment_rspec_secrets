@@ -1,9 +1,15 @@
 require 'rails_helper'
 
 describe Secret do
-  it "with a name and email is valid"
-  it "without a name is invalid"
-  it "without an email address is invalid"
-  it "with a duplicate email address is invalid"
-  it "returns a user's name as a string"
+  let(:user){ build(:user) }
+  let(:secret){ build(:secret) }
+  let(:num_secrets){ 5 }
+
+  describe "#last_five"
+    before do
+      secrets = create_list(:secret, 7)
+    end
+    it "returns a users last 5 secrets" do
+      expect(secret.last_five).to eq(num_secrets)
+    end
 end
