@@ -19,15 +19,15 @@ describe Secret do
     should validate_length_of(:body)
   end
 
-  it "belong to an author" do
-    should belong_to(:author)
-  end
+  # it "belong to an author" do
+  #   should belong_to(:author)
+  # end
 
   describe ".last_five" do
     it "returns the 5 most recent secrets" do
       secret_list = create_list(:secret, 10)
 
-      expect( Secret.last_five.pluck(:id) ).to eq [10,9,8,7,6]
+      expect( Secret.last_five ).to eq(secret_list[5..9].reverse)
     end
 
     it "returns an empty array if there aren't any secrets" do
