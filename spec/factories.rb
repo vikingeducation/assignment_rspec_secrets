@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :user do
-    name "foo"
-    email "#{name}@email.com"
+    name "foobarbaz"
+    email {"#{name}@email.com"}
     password "password"
-    association :secrets
+
   end
 
   factory :secrets do
