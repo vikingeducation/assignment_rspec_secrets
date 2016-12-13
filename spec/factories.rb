@@ -10,6 +10,9 @@ FactoryGirl.define do
     title "Secret Title"
     body "This is a secret body."
     author
+    trait :sequence_of do
+      sequence(:title) { |n| "Secret Title #{n}" }
+    end
   end
 
 end
