@@ -9,8 +9,8 @@ feature 'User accounts' do
 
   # `scenario` is an alias for `it`
   scenario "New user" do
-
-    visit new_user_path
+    click_link "All Users"
+    click_link "New User"
 
     # fill in the form for a new user
     within "form#new_user" do

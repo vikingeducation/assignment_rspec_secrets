@@ -46,13 +46,35 @@ describe Secret do
 
 
   feature "Edit Secret" do
-    context "Signed in user" do
-      let(:secret){ create(:secret) }
+    context "Current user" do
+      let(:secret){ create(:secret, author: user) }
       before do
         sign_in(user)
         visit edit_secret_path(secret)
       end
 
+      scenario "valid secret" do
+        fill_in "Title", with: "New Secret Test Edited"
+        fill_in "Body", with: "#{'l' * 140}"
+        click_button "Update Secret"
+        expect(page).to have_content "Secret was successfully updated"
+        expect(page).to have_content "New Secret Test Edited"
+
+      end
+
+    end
+
+    context "Not current user" do
+      let(:other_user) { create(:user) }
+      let(:secret){ create(:secret, author_id: other_user.id) }
+      before do
+        secret.save
+        sign_in(user)
+      end
+
+      scenario "vist other user's secret edit path" do
+        expect{ visit edit_secret_path(secret) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
 
     end
   end
