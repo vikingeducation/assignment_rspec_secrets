@@ -31,13 +31,17 @@ feature 'Users' do
   end
 
   scenario 'sign in' do
-    click_link 'Login'
+    sign_in( user )
 
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_button "Log in"
-    save_and_open_page
     expect(page).to have_content "Welcome, #{user.name}!"
+  end
+
+  scenario 'sign in with bad password is unsuccessful' do
+
+    sign_in( user, 'nonsense')
+
+    expect(page).to have_content "Email"
+    expect(page).to have_content "Password"
   end
 
 end
