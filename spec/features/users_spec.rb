@@ -45,7 +45,40 @@ feature "view secrets" do
       expect(page).to have_content("Login")
     end
 
+    scenario "able to display secrets" do
+        create(:secret)
+        click_link("All Secrets")
+        click_link("Show")
+        expect(page).to have_content("Back")
+    end
+#
+# secret_path(method: :delete)
+# visit('/projects')
+# visit(post_comments_path(post))
+
+    scenario "can't destroy secrets" do
+      secret = create(:secret)
+      visit(secret_path(id: secret.id, method: :delete))
+      click_link("All Secrets")
+      expect(page).to have_content(secret.title)
+
+    end
+
+    scenario "can't edit secrets" do
+      secret = create(:secret)
+      visit(secret_path(id: secret.id, method: :patch))
+      click_link("All Secrets")
+      expect(page).to have_content(secret.title)
+    end
+
   end
+
+
+
+
+
+
+
 
   context "logged in user" do
     scenario "can create a secret!" do
@@ -69,7 +102,7 @@ feature "view secrets" do
       create(:secret, author: user)
 
       sign_in(user)
-      
+
       click_link("Edit")
       fill_in("Title", with: "This is new" )
       fill_in("Body", with: "Very new" )
@@ -77,7 +110,16 @@ feature "view secrets" do
 
       expect(page).to have_content("Secret was successfully updated.")
     end
-  end
 
+    scenario "can delete secret!" do
+      create(:secret, author: user, title: "ABCDEFGH")
+      sign_in(user)
+
+      click_link("Destroy")
+
+      expect(page).to_not have_content("ABCDEFGH")
+    end
+
+  end
 
 end
