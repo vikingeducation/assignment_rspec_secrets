@@ -61,7 +61,6 @@ feature 'Secrets App' do
       fill_in('Email', with: user.email)
       fill_in('Password', with: user.password)
       click_on("Log in")
-      save_and_open_page
       expect(page).to have_content "Welcome, #{user.name}"
     end
 
@@ -69,14 +68,44 @@ feature 'Secrets App' do
 
   context "when logged in" do
 
-    scenario 'allows user to create a secret'
-    scenario 'when trying to create a blank secret, rerenders the secret form with error messages'
+    let(:secret) { build(:secret) }
+    let(:user_secret) { create(:secret, author_id: user.id) }
 
-    scenario 'allows user to edit his own secret'
-    scenario 'does not allow user to edit another user\'s secret'
+    before do
+      sign_in(user)
+    end
 
-    scenario 'allows user to delete his own secret'
-    scenario 'does not allow user to delete another user\'s secret'
+    scenario 'allows user to create a secret' do
+      click_link("New Secret")
+      fill_in('Title', with: secret.title)
+      fill_in('Body', with: secret.body)
+      click_on('Create Secret')
+      expect(page).to have_content('Secret was successfully created')
+    end
+
+    scenario 'when trying to create a blank secret, rerenders the secret form with error messages' do
+      click_link("New Secret")
+      click_on('Create Secret')
+      expect(page).to have_content('Body can\'t be blank')
+      expect(page).to have_content('Title can\'t be blank')
+    end
+
+    context 'when user has created a secret' do  
+
+      scenario 'allows user to edit and update his own secret' do
+        user_secret
+        click_on('All Secrets')
+        click_on("Edit")
+        click_on('Update Secret')
+        expect(page).to have_content('Secret was successfully updated.')
+      end
+
+      scenario 'does not allow user to edit another user\'s secret'
+
+      scenario 'allows user to delete his own secret'
+      scenario 'does not allow user to delete another user\'s secret'
+
+    end
 
   end
 
