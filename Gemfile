@@ -39,6 +39,8 @@ group :development, :test do
   gem 'guard'
   gem 'guard-rspec'
   gem 'shoulda'
+  gem 'capybara'
+  gem 'launchy'
 end
 
 group :development do
