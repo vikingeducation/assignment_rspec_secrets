@@ -30,12 +30,18 @@ describe "Visitor actions" do
     end
 
     it "successfully adds a user for valid signups" do
-      click_on "Create User"
-      expect(page).to have_content("User was successfully created.")
+      # click_on "Create User"
       # expect(page).to have_current_path(user_path(user))
+      # expect(page).to have_content("User was successfully created.")
+      expect{ click_button "Create User" }.to change(User, :count).by(1)
     end
 
-    it "does not add a user for invalid signups"
+    it "does not add a user for invalid signups" do
+      user_count = User.count
+      fill_in "Email", with: ""
+      click_on "Create User"
+      expect(User.count).to eq(user_count)
+    end
 
   end
 
@@ -43,15 +49,27 @@ end
 
 describe "Authentication" do
 
+  let ( :user ) { create(:user) }
+
   context "with proper credentials" do
 
-    it "allows you to sign in"
+    before do
+      sign_in(user)
+    end
+
+    it "allows you to sign in" do
+      expect(page).to have_content("Welcome, #{user.name}")
+    end
 
   end
 
   context "with improper credentials" do
 
-    it "does not allow you to sign in"
+    it "does not allow you to sign in" do
+      user.password = "NOTFOOBAR"
+      sign_in(user)
+      expect(page).to have_current_path(session_path)
+    end
 
   end
 
@@ -59,29 +77,84 @@ end
 
 describe "Signed-in user actions" do
 
+  let ( :user ) { create(:user) }
+
+  before do
+    sign_in(user)
+  end
+
   context "working with users" do
 
-    it "can edit themselves"
+    it "can edit themselves" do
+      visit edit_user_path(user)
+      expect(page).to have_content("Editing user")
+    end
 
-    it "cannot edit other users"
+    it "cannot edit other users" do
+      new_user = create(:user)
+      visit edit_user_path(new_user)
+      expect(page).to have_content("Listing secrets")
+    end
 
-    it "can delete themselves"
+    it "can delete themselves" do
+      visit users_path
+      within("tr", text: user.email) do
+        expect{ click_on "Destroy" }.to change(User, :count).by(-1)
+      end
+    end
 
-    it "cannot delete other users"
+    it "cannot delete other users" do
+      new_user = create(:user)
+      visit users_path
+      within("tr", text: new_user.email) do
+        expect{ click_on "Destroy" }.to change(User, :count).by(0)
+      end
+    end
 
   end
 
   context "working with secrets" do
 
-    it "can create a secret"
+    let(:secret) { build(:secret, author: user) } # create wasn't working?
 
-    it "can edit their own secrets"
+    before do
+      secret.save!
+      visit secrets_path
+    end
 
-    it "cannot edit other user's secrets"
+    it "can create a secret" do
+      click_on "New Secret"
+      expect(page).to have_content("New secret")
+    end
 
-    it "can delete their own secrets"
+    it "can edit their own secrets" do
+      within("tr", text: user.name) do
+        click_on "Edit"
+      end
+      expect(page).to have_content("Editing secret")
+    end
 
-    it "cannot delete other user's secrets"
+    it "cannot edit other user's secrets" do
+      new_user = create(:user)
+      new_secret = create(:secret, author: new_user)
+      expect{ visit edit_secret_path(new_secret) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "can delete their own secrets" do
+      within("tr", text: user.name) do
+        expect{ click_on "Destroy" }.to change(Secret, :count).by(-1)
+      end
+    end
+
+    it "cannot delete other user's secrets" do
+      new_user = create(:user)
+      new_secret = create(:secret, author: new_user)
+      visit secrets_path
+      within("tr", text: new_user.name) do
+        # expect{ click_on "Destroy" }.to change(Secret, :count).by(0)
+        expect(page).to_not have_content("Destroy")
+      end
+    end
 
   end
 

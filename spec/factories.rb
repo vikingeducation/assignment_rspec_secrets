@@ -5,7 +5,7 @@ FactoryGirl.define do
     password  "foobar"
   end
 
-  factory :secrets do
+  factory :secret do
     title     "foo title"
     body      "foo body"
     author
