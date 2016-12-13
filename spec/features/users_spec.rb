@@ -32,7 +32,7 @@ feature 'User accounts' do
     expect(page).to have_content "User was successfully created"
 
   end
-  # ...and so on
+
 end
 
 feature "Authentication" do
