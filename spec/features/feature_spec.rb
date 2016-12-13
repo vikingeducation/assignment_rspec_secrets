@@ -17,40 +17,27 @@ feature 'Secrets App' do
     end
 
     scenario 'allows visitor to sign up' do
-      visit ('users/new')
-      fill_in('Name', :with => 'Bob Dobbs')
-      fill_in('Email', :with => 'bob@subgenius.net')
-      fill_in('Password', :with => 'password')
-      fill_in('Password confirmation', :with => 'password')
+      fill_in_sign_ups
       click_on("Create User")
       expect(page).to have_content "User was successfully created"
     end
 
     scenario 'when trying to sign up with blank name field, rerenders the sign up form with error messages' do
-      visit ('users/new')
+      fill_in_sign_ups
       fill_in('Name', :with => "")
-      fill_in('Email', :with => 'bob@subgenius.net')
-      fill_in('Password', :with => 'password')
-      fill_in('Password confirmation', :with => 'password')
       click_on("Create User")
       expect(page).to have_content "Name can't be blank"
     end
 
     scenario 'when trying to sign up with blank email field, rerenders the sign up form with error messages' do
-      visit ('users/new')
-      fill_in('Name', :with => "Bob Dobbs")
+      fill_in_sign_ups
       fill_in('Email', :with => "")
-      fill_in('Password', :with => 'password')
-      fill_in('Password confirmation', :with => 'password')
       click_on("Create User")
       expect(page).to have_content "Email can't be blank"
     end
 
     scenario 'when you bungle the password confirmation, rerenders the sign up form with errors' do
-      visit ('users/new')
-      fill_in('Name', :with => "Bob Dobbs")
-      fill_in('Email', :with => "bob@subgenius.net")
-      fill_in('Password', :with => 'password')
+      fill_in_sign_ups
       fill_in('Password confirmation', :with => 'candlejack')
       click_on("Create User")
       expect(page).to have_content "Password confirmation doesn't match Password"
@@ -100,10 +87,24 @@ feature 'Secrets App' do
         expect(page).to have_content('Secret was successfully updated.')
       end
 
-      scenario 'does not allow user to edit another user\'s secret'
+      scenario 'does not allow user to edit another user\'s secret' do
+        secret.save
+        click_on('All Secrets')
+        expect(page).not_to have_content "Edit"
+      end
 
-      scenario 'allows user to delete his own secret'
-      scenario 'does not allow user to delete another user\'s secret'
+      scenario 'allows user to delete his own secret' do
+        user_secret
+        click_on('All Secrets')
+        expect(page).to have_content secret.title
+        click_on("Destroy")
+        expect(page).to_not have_content secret.title
+      end
+      scenario 'does not allow user to delete another user\'s secret' do
+        secret.save
+        click_on('All Secrets')
+        expect(page).not_to have_content "Destroy"
+      end
 
     end
 

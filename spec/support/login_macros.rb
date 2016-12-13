@@ -14,4 +14,12 @@ module SecretMacros
     click_on('Create Secret')
   end
 
+  def fill_in_sign_ups
+    visit ('users/new')
+    fill_in('Name', :with => 'Bob Dobbs')
+    fill_in('Email', :with => 'bob@subgenius.net')
+    fill_in('Password', :with => 'password')
+    fill_in('Password confirmation', :with => 'password')
+  end
+
 end
