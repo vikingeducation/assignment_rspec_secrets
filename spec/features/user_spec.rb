@@ -4,6 +4,7 @@ feature 'Secrets#index' do
   let(:user){ create(:user) }
   let(:name){"NewFoo"}
   let(:email){"Newfoo@gmail.com"}
+  let(:updated_body){"updated_body"}
   before do
     visit root_path
   end
@@ -33,8 +34,67 @@ feature 'Secrets#index' do
 
   end
 
+  context "as a not signed in user" do
 
+    before do
+      sign_in(user)
+    end
 
+    it "signs in valid user to my account" do
+      expect(page).to have_content("Welcome, #{user.name}!")
+    end
+
+  end
+
+  context "as a signed in user" do
+
+    before do
+      sign_in(user)
+      create_secret
+    end
+
+    it "creates a secret when given valid inputs" do
+      expect(page).to have_content("Secret was successfully created.")
+    end
+
+  end
+
+  context "as a user who has created a secret" do
+
+    before do
+      sign_in(user)
+      create_secret
+      click_link "Edit"
+      fill_in "Body", with: updated_body
+      click_button "Update Secret"
+    end
+
+    it "successfully updates secret when edited" do
+
+      expect(page).to have_content("Secret was successfully updated.")
+
+      expect(page).to have_content(updated_body)
+    end
+
+  end
+
+  context "as a user who has created a secret" do
+
+    before do
+      sign_in(user)
+      create_secret
+      click_link "All Secrets"
+      click_link "Destroy"
+      save_and_open_page
+    end
+
+    it "does soemthing" do
+      expect(html).to_not include("<td>")
+    end
+
+  end
+
+  # save_and_open_page
   # context "with improper credentials" do
   #   before do
   #     user.email = user.email + "x"
