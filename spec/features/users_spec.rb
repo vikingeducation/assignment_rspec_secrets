@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature "view secrets" do
-
+  let(:user){ create(:user) }
   before do
     visit root_url
   end
@@ -26,9 +26,7 @@ feature "view secrets" do
       expect(page).to have_content("User was successfully created.")
     end
 
-    scenario "logging in" do
-      user = create(:user, email: "asdf@asdf.com",
-                  password: "asdfasdf" )
+    scenario "logging in with valid data" do
 
       click_link("Login")
       fill_in("Email", with: user.email )
@@ -38,6 +36,48 @@ feature "view secrets" do
       expect(page).to have_content("Welcome, #{user.name}")
     end
 
+    scenario "logging in with invalid data" do
+      click_link("Login")
+      fill_in("Email", with: "thisisnotanaccount@yahoo.com" )
+      fill_in("Password", with: user.password )
+      click_on("Log in")
+
+      expect(page).to have_content("Login")
+    end
+
   end
+
+  context "logged in user" do
+    scenario "can create a secret!" do
+      sign_in(user)
+
+      click_on("New Secret")
+      fill_in("Title", with: "Wow such secret!" )
+      fill_in("Body", with: "Much Juicy" )
+      click_on("Create Secret")
+
+      expect(page).to have_content("Secret was successfully created.")
+    end
+
+    scenario "can log out!" do
+      sign_in(user)
+      click_on("Logout")
+      expect(page).to have_content("Login")
+    end
+
+    scenario "can edit secret!" do
+      create(:secret, author: user)
+
+      sign_in(user)
+      
+      click_link("Edit")
+      fill_in("Title", with: "This is new" )
+      fill_in("Body", with: "Very new" )
+      click_on("Update Secret")
+
+      expect(page).to have_content("Secret was successfully updated.")
+    end
+  end
+
 
 end
