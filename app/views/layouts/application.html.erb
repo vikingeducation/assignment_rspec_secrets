@@ -9,6 +9,11 @@
 <body>
 
   <%= render "shared/navigation" %>
+  <% flash.each do |type, msg| %>
+  <div class="alert alert-block alert-<%= type %>">
+    <p><%= msg %></p>
+  </div>
+  <% end %>
 
 <%= yield %>
 
