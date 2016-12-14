@@ -49,6 +49,7 @@ end
 group :test do
   gem 'capybara'
   gem 'launchy'
+  gem 'rails-controller-testing'
 end
 
 # Use unicorn as the app server

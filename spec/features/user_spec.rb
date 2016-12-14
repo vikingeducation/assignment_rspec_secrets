@@ -109,7 +109,7 @@ feature 'Secrets#index' do
       sign_in(user)
     end
 
-    it "will not allow you to create a new user" do
+    xit "will not allow you to create a new user" do
       # unwanted behavior
       create_user
       expect(page).to_not have_content("User was successfully created.")
