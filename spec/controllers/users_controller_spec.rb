@@ -2,6 +2,8 @@ require 'rails_helper'
 
 describe UsersController do
 
+
+
   describe "POST #create" do
 
     context "valid input" do
@@ -31,15 +33,19 @@ describe UsersController do
     end
   end
 
-  describe "PATCH #update" do 
+  describe "PATCH #update" do
 
     let(:user) { create(:user) }
     let(:updated_name) { "Newname" }
 
-    context "valid input" do 
-      it "updates the user" do 
+    before do
+      session[:user_id] = user.id
+    end
+
+    context "valid input" do
+      it "updates the user" do
         process :update, params: { id: user.id, user: attributes_for(:user, name: updated_name) }
-        user.reload!
+        user.reload
         expect(user.name).to eq(updated_name)
       end
     end
