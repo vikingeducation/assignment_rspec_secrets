@@ -68,6 +68,15 @@ describe UsersController do
       end
 
     end
+
+    context "unauthenticated user" do
+      it 'redirects away from the edit page' do
+        session.destroy
+        process :edit, params: { id: user.id }
+
+        expect(response).to redirect_to new_session_path
+      end
+    end
   end
 
   describe "PATCH #update" do
@@ -86,7 +95,6 @@ describe UsersController do
         expect(user.name).to eq(before_update.name)
 
         expect(response).to redirect_to(user_path(user.id))
-        expect(flash[:success]).to_not be_nil
       end
 
     end
@@ -112,6 +120,20 @@ describe UsersController do
       end
 
     end
+
+    context "unauthenticated user" do
+      it 'does not update the user' do
+        session.destroy
+
+        before_update = user
+        process :update, method: :patch, params: { id: user.id, user: { email: "new@email.com", password: "abc123" } }
+        user.reload
+
+        expect(user).to eq before_update
+
+        expect(response).to redirect_to new_session_path
+      end
+    end
   end
 
   describe "POST #destroy" do
@@ -120,14 +142,53 @@ describe UsersController do
     end
 
     context "correct user" do
+      it 'deletes that user from the database' do
+        expect do
+          process :destroy, params: { id: user.id }
+        end.to change(User, :count).by -1
+      end
 
+      it 'redirects to root path' do
+        process :destroy, params: { id: user.id }
 
+        expect(response).to redirect_to users_path
+      end
+
+      it 'destroys the current session' do
+        process :destroy, params: { id: user.id }
+
+        expect( session[:user_id] ).to be_nil
+      end
     end
 
     context "incorrect user" do
+      before do
+        another
+      end
 
-      
+      it 'does note delete the user' do
+        expect do
+          process :destroy, params: { id: another.id }
+        end.not_to change(User, :count)
+      end
 
+      it 'redirects to index' do
+        process :destroy, params: { id: another.id }
+
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
+  context "unauthenticated user" do
+    it 'does not destroy the user' do
+      session.destroy
+
+      expect do
+        process :destroy, params: { id: user.id }
+      end.not_to change(User, :count)
+
+      expect(response).to redirect_to new_session_path
     end
   end
 end
