@@ -34,6 +34,16 @@ gem 'bcrypt', '~> 3.1.7'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+
+end
+
+group :development, :test do
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+  gem 'guard-rspec'
+  gem 'rails-controller-testing'
+  gem 'capybara'
+  gem 'launchy'
 end
 
 # Use unicorn as the app server
@@ -44,4 +54,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
