@@ -15,23 +15,33 @@ describe UsersController do
         process :create, params: { user: attributes_for(:user) }
         expect(response).to redirect_to(user_path(User.last.id))
       end
-
     end
-  end
 
-  context "invalid input" do
-    it "rejects creation" do
-      expect {
+    context "invalid input" do
+      it "rejects creation" do
+        expect {
+          process :create, params: { user: attributes_for(:user, password: '1') }
+        }.to change(User, :count).by(0)
+      end
+
+      it "doesn't redirect to new user's page" do
         process :create, params: { user: attributes_for(:user, password: '1') }
-      }.to change(User, :count).by(0)
+        expect(response).to have_http_status(:ok)
+      end
     end
-
-    it "doesn't redirect to new user's page" do
-      process :create, params: { user: attributes_for(:user, password: '1') }
-      expect(response).to have_http_status(:ok)
-    end
-
   end
 
+  describe "PATCH #update" do 
 
+    let(:user) { create(:user) }
+    let(:updated_name) { "Newname" }
+
+    context "valid input" do 
+      it "updates the user" do 
+        process :update, params: { id: user.id, user: attributes_for(:user, name: updated_name) }
+        user.reload!
+        expect(user.name).to eq(updated_name)
+      end
+    end
+  end
 end

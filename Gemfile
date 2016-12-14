@@ -38,7 +38,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'pry-byebug'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'guard-rspec'
