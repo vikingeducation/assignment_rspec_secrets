@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :secret do
     title    "Foo Article"
     body     "Lorem Ipsum text"
-    author
+    association :author, factory: :user
   end
 
 end

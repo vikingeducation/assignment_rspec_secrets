@@ -8,5 +8,4 @@ FactoryGirl.define do
     password "foobar"
 
   end
-
 end
