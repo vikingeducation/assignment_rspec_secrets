@@ -71,6 +71,16 @@ describe Secret do
     it 'secret responds to author association' do
       expect(secret).to respond_to(:author)
     end
+    it 'linking a valid author succeeds' do
+      author = create(:author)
+      secret.author = author
+      expect(secret).to be_valid
+    end
+    it 'linking a non-existent author fails' do
+      secret.author_id = 12342
+      expect(secret).not_to be_valid
+    end
+
 
 
   end
