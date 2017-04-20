@@ -9,6 +9,8 @@ FactoryGirl.define do
     sequence(:title){ |n| "A New Title #{n}"}
     body 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus, molestiae?'
     author
+
+
   end
 
 
