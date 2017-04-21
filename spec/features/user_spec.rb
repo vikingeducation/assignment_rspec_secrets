@@ -89,7 +89,6 @@ describe 'User' do
     end
     feature 'CRUD-ing secrets' do
       let(:secret){ create(:secret)}
-
       before do
         sign_in(user)
       end
