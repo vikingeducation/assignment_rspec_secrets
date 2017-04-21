@@ -1,6 +1,6 @@
 class SecretsController < ApplicationController
   before_action :set_secret, only: [:edit, :update, :destroy]
-  skip_before_action :require_login, :only => [:index, :show]
+  skip_before_action :require_login, :only => [:index, :show, :update]
 
   # GET /secrets
   # GET /secrets.json
@@ -64,17 +64,17 @@ class SecretsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    # In this case, we will (intentionally) get an error if 
-    #   the secret you're trying to access doesn't belong to you
-    # In real world scenarios, we'd be more likely to set a
-    #   flash message and redirect with a proper error code here
-    def set_secret
-      @secret = current_user.secrets.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  # In this case, we will (intentionally) get an error if
+  #   the secret you're trying to access doesn't belong to you
+  # In real world scenarios, we'd be more likely to set a
+  #   flash message and redirect with a proper error code here
+  def set_secret
+    @secret = current_user.secrets.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def secret_params
-      params.require(:secret).permit(:title, :body)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def secret_params
+    params.require(:secret).permit(:title, :body)
+  end
 end
