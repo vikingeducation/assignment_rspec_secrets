@@ -1,10 +1,8 @@
 require 'rails_helper'
-require_relative '../../support/helper_methods'
-include HelperMethods
+include ApplicationHelper
 
 describe 'layouts/application.html.erb' do
   let(:user){ create(:user)}
-  let(:secret){ create(:secret, author: user)}
   context 'logged out' do
     it 'shows login link' do
       render
@@ -13,7 +11,7 @@ describe 'layouts/application.html.erb' do
   end
   context 'logged in' do
     before do
-      assign(:current_user, user)
+      view_sign_in(user)
     end
     it 'shows logout link' do
       render

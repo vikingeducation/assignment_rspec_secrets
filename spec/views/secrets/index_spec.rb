@@ -1,6 +1,4 @@
 require 'rails_helper'
-require_relative '../../support/helper_methods'
-include HelperMethods
 
 describe 'secrets/index.html.erb' do
   let(:user){ create(:user)}
@@ -15,7 +13,7 @@ describe 'secrets/index.html.erb' do
   end
   context 'logged in' do
     before do
-      assign(:current_user, user)
+      view_sign_in(user)
       assign(:secrets, create_list(:secret, 5, author: user))
     end
     it 'shows author for logged in user' do

@@ -16,5 +16,9 @@ module LoginMacros
     post session_path, params: { email: user.email, password: user.password }
   end
 
+  def view_sign_in(user)
+    session[:user_id] = user.id
+  end
+
 
 end

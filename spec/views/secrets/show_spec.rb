@@ -1,6 +1,4 @@
 require 'rails_helper'
-require_relative '../../support/helper_methods'
-include HelperMethods
 
 
 describe 'secrets/show.html.erb' do
@@ -17,7 +15,7 @@ describe 'secrets/show.html.erb' do
   end
   context 'logged in' do
     before do
-      assign(:current_user, user)
+      view_sign_in(user)
     end
     it 'shows author for logged in user' do
       render
