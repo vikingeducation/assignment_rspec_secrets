@@ -1,15 +1,5 @@
 require "rails_helper"
 
-def repeat(x, n)
-  acc = []
-  n.times{ acc << x }
-  acc
-end
-
-def make_string(char, len)
-  repeat(char, len).map(&:to_s).join
-end
-
 describe Secret do
   let(:secret){ build(:secret) }
 

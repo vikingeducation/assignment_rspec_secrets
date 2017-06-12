@@ -1,15 +1,5 @@
 require "rails_helper"
 
-def repeat(x, n)
-  acc = []
-  n.times{ acc << x }
-  acc
-end
-
-def easy_pass(x, len)
-  repeat(x, len).map(&:to_s).join
-end
-
 describe User do
   let(:user){ create(:user) }
   let(:user_attrs){ attributes_for(:user) }
