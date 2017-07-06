@@ -54,17 +54,17 @@ describe User do
   end
 
   it "with password shorter than 6 letters/numbers is invalid" do
-    new_user = build(:user, :password_digest => ("s"*5))
+    new_user = build(:user, :password => ("s"*5))
     expect(new_user).not_to be_valid
   end
 
   it "with password longer than 16 etters/numbers is invalid" do
-    new_user = build(:user, :password_digest => ("s"*17))
+    new_user = build(:user, :password => ("s"*17))
     expect(new_user).not_to be_valid
   end
 
-  it "with password nil is valid" do
-    new_user = create(:user, :password_digest => nil)
+  it "with password nil is invalid" do
+    new_user = build(:user, :password => nil)
     expect(new_user).not_to be_valid
   end
 
@@ -87,7 +87,7 @@ describe User do
       user.save!
     end
     it "with a duplicate name is invalid" do
-      new_user = build(:user, :name => user.name, :email => "test@op.pl")
+      new_user = build(:user, :name => user.name)
       expect(new_user).not_to be_valid
     end
 
@@ -97,18 +97,25 @@ describe User do
   it "responds to the secret association" do
     expect(user).to respond_to(:secret)
   end
-
+ 
   specify "linking a valid secret succeeds" do
     secret = create(:secret)
-    secret.user = author
+    author = secret.author
     expect( author ).to be_valid
   end
 
+  # 4. The Happy / Sad / Bad paths
+  describe "Happy Path" do
 
-  # 4.Model methods
+  end
 
-  # 5. The Happy / Sad / Bad paths
+  describe "Sad Path" do
 
+  end
+
+  describe "Bad Path" do
+
+  end
 
 
 end
