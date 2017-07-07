@@ -84,7 +84,7 @@ describe Secret do
     secret.author = author
     expect( secret ).to be_valid
   end
- 
+
   specify "linking nonexistent author fails" do
     secret.author_id = 1234
     expect( secret ).not_to be_valid
@@ -95,18 +95,22 @@ describe Secret do
   describe ".last_five" do
 
     let(:num_secrets){5}
-    let(:many_secrets){create_list(:secret, 10)}
-    let(:returns_five){many_secrets.order(id: :desc).limit(5)}
+    let(:recent_secrects){Secret.ids[-5..-1].reverse}
 
-
+    before do
+      user.secrets = create_list(:secret, 10)
+      user.save!
+    end
     it "returns the five secrets" do
-      puts "#{Secret.last_five.inspect}"
-      expect(Secret.last_five.count).to eq(num_secrets)
+      expect(Secret.last_five.size).to eq(num_secrets)
     end
 
-    it "returns the last five secrets" do
-      expect(Secret.last_five).to eq(returns_five)
+
+    it "returns the last five" do
+      expect(Secret.last_five.ids).to eq(recent_secrects)
     end
+
+
   end
 
 

@@ -10,11 +10,23 @@ FactoryGirl.define do
   factory :secret do
     sequence(:title){ |n| "Hey, my title - #{n}"}
     sequence(:body){ |n| "Hey, my new body - #{n}"}
-    # title "Hey, This is  my title"
-    # body "Hey, This is my body"
     author
 
-    # association :author, :factory => :user
+
+    # trait :frequent_author do
+    #   after_build do |user|
+    #     create_list( :post, 5, author: user )
+    #   end
+    # end
+
+    # trait :recent do
+    #   created_at { Time.now }
+    # end
+    #
+    # trait :old do
+    #   created_at { 1.week.ago }
+    # end
+
   end
 
 

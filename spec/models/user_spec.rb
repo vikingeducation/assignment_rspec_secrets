@@ -95,9 +95,9 @@ describe User do
 
   # 3.Associations
   it "responds to the secret association" do
-    expect(user).to respond_to(:secret)
+    expect(user).to respond_to(:secrets)
   end
- 
+
   specify "linking a valid secret succeeds" do
     secret = create(:secret)
     author = secret.author
@@ -112,7 +112,7 @@ describe User do
   describe "Sad Path" do
 
   end
-
+ 
   describe "Bad Path" do
 
   end
