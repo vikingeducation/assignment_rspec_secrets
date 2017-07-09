@@ -112,7 +112,7 @@ describe User do
   describe "Sad Path" do
 
   end
- 
+
   describe "Bad Path" do
 
   end
