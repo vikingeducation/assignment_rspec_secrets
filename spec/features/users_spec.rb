@@ -1,7 +1,10 @@
 require 'rails_helper'
 
 feature 'Actions as visitor' do
+  let(:user){create(:user)}
+  let(:secret){create(:secret, author: user )}
   before do
+    secret
     visit root_path
   end
 
@@ -9,26 +12,25 @@ feature 'Actions as visitor' do
     scenario "successfully view page with a secret" do
       expect(page).to have_css('h1')
       expect(page).to have_content "Listing secrets"
-      expect(page).to has_link?("Show")
+      find_link('Show').visible?
     end
   end
 
   context "viewing specific secret - show" do
     scenario "successfully view page with a secret" do
       click_link('Show')
-      page.assert_selector('p', count: 3)
-      page.assert_selector('p#Author', count: 1)
-      page.assert_selector('p#Body', count: 1)
-      page.assert_selector('p#Title', count: 1)
+      expect(page).to have_content "Author"
+      expect(page).to have_content "Body"
+      expect(page).to have_content "Title"
     end
   end
 
   context "unable to create secrets" do
     scenario "login page appears" do
       click_link('New Secret')
-      expect(page).to has_field("Password")
-      expect(page).to has_field("Email")
-      expect(page).to has_button("Log in")
+      expect(page).to have_field("Password")
+      expect(page).to have_field("Email")
+      expect(page).to have_button("Log in")
     end
   end
 
@@ -47,12 +49,12 @@ feature 'Signing up as visitor' do
     click_link('New User')
   end
 
-  scenario "with improper name" do
+  scenario "with improper name"  do
     fill_in('Name', :with => '1')
     fill_in('Email', :with => 'Seek@gmail.com')
     fill_in('Password', :with => 'Seekrit')
     fill_in('Password confirmation', :with => 'Seekrit')
-    click_link "Sign up"
+    click_button "Create User"
     expect(page).to have_content "Name is too short"
     expect(page).to have_css ('div#error_explanation')
   end
@@ -62,7 +64,7 @@ feature 'Signing up as visitor' do
     fill_in('Email', :with => 'gmail.com')
     fill_in('Password', :with => 'Seekrit')
     fill_in('Password confirmation', :with => 'Seekrit')
-    click_link "Sign up"
+    click_button "Create User"
     expect(page).to have_content "Email is invalid"
     expect(page).to have_css ('div#error_explanation')
   end
@@ -72,7 +74,7 @@ feature 'Signing up as visitor' do
     fill_in('Email', :with => 'Seek@gmail.com')
     fill_in('Password', :with => 'See')
     fill_in('Password confirmation', :with => 'See')
-    click_link "Sign up"
+    click_button "Create User"
     expect(page).to have_content "Password is too short"
     expect(page).to have_css ('div#error_explanation')
   end
@@ -82,7 +84,7 @@ feature 'Signing up as visitor' do
     fill_in('Email', :with => 'Seek@gmail.com')
     fill_in('Password', :with => 'Seekrit')
     fill_in('Password confirmation', :with => 'Seewer')
-    click_link "Sign up"
+    click_button "Create User"
     expect(page).to have_content "Password confirmation doesn't match Password"
     expect(page).to have_css ('div#error_explanation')
   end
@@ -92,27 +94,29 @@ feature 'Signing up as visitor' do
     fill_in('Email', :with => '')
     fill_in('Password', :with => 'Seekrit')
     fill_in('Password confirmation', :with => 'Seekrit')
-    click_link "Sign up"
+    click_button "Create User"
     expect(page).to have_content "Email is invalid"
+    expect(page).to have_field "Email"
     expect(page).to have_css ('div#error_explanation')
   end
 
   scenario "with correct data" do
-    fill_in('Name', :with => 'Seek#{rand(123)}')
-    fill_in('Email', :with => 'Seek#{rand(123)}@gmail.com')
+    fill_in('Name', :with => "Seek#{rand(123)}")
+    fill_in('Email', :with => "Seek#{rand(123)}@gmail.com")
     fill_in('Password', :with => 'Seekrit')
     fill_in('Password confirmation', :with => 'Seekrit')
-    click_link "Sign up"
-    expect(page).to have_content "Successfully"
+    expect{ click_button "Create User" }.to change(User, :count).by(1)
+    expect(page).to have_content "successfully"
     find_link('Logout').visible?
+    sign_out
   end
 
 end
 
 feature 'Logging in to an account' do
-
-  let(:user){User.first}
+  let(:user){create(:user)}
   before do
+    user
     visit root_path
     click_link('Login')
   end
@@ -120,32 +124,32 @@ feature 'Logging in to an account' do
   scenario "with improper email" do
     fill_in('Email', :with => 'daria@dar.pl')
     fill_in('Password', :with => 'Seekrit')
-    click_link "Login"
-    expect(page).to have_content "Email is invalid"
-    expect(page).to have_css ('div#error_explanation')
+    click_button "Log in"
+    expect(page).to have_content("We couldn't sign you in")
+    expect(page).to have_css ('div.alert')
   end
 
   scenario "with improper password" do
     fill_in('Email', :with => 'daria@dar.pl')
     fill_in('Password', :with => 'Seekrit')
-    click_link "Login"
-    expect(page).to have_content "Password is invalid"
-    expect(page).to has_link?("Show")
-    expect(page).to have_content "Listing secrets"
+    click_button "Log in"
+    expect(page).to have_content("We couldn't sign you in")
+    expect(page).to have_css ('div.alert')
   end
 
   scenario "with correct login data" do
     sign_in(user)
     expect(page).to have_content "Listing secrets"
-    expect(page).to has_link?("Show")
+    expect(page).to have_link("Logout")
     expect(page).not_to have_content "**"
   end
 
 end
 
 feature 'Creating secret as signed in user' do
-  let(:user){User.first}
+  let(:user){create(:user)}
   before do
+    user
     visit root_path
     sign_in(user)
     click_link "New Secret"
@@ -154,7 +158,7 @@ feature 'Creating secret as signed in user' do
   scenario "with improper title" do
     fill_in('Title', :with => '')
     fill_in('Body', :with => 'The owls are not what they seem. An amazing story catches every one involved in magic of this town.')
-    click_link "Create Secret"
+    click_button "Create Secret"
     expect(page).to have_content "Title is too short"
     expect(page).to have_css ('div#error_explanation')
   end
@@ -162,7 +166,7 @@ feature 'Creating secret as signed in user' do
   scenario "with improper body" do
     fill_in('Title', :with => 'The owls are faded')
     fill_in('Body', :with => 'asd')
-    click_link "Create Secret"
+    click_button "Create Secret"
     expect(page).to have_content "Body is too short"
     expect(page).to have_css ('div#error_explanation')
   end
@@ -170,15 +174,15 @@ feature 'Creating secret as signed in user' do
   scenario "with body missing" do
     fill_in('Title', :with => 'The owls are faded')
     fill_in('Body', :with => '')
-    click_link "Create Secret"
-    expect(page).to have_content "Body can't be blank."
+    click_button "Create Secret"
+    expect(page).to have_content "Body can't be blank"
     expect(page).to have_css ('div#error_explanation')
   end
 
   scenario "successfull creation" do
     fill_in('Title', :with => 'The owls are faded')
     fill_in('Body', :with => 'The owls are not what they seem. An amazing story catches every one involved in magic of this town.')
-    click_link "Create Secret"
+    click_button "Create Secret"
     expect(page).to have_content "Secret was successfully created."
     expect(page).to have_css ('p#notice')
     expect(page).to have_content "The owls are faded"
@@ -190,50 +194,63 @@ end
 
 
 feature 'Editing secret as signed in user' do
-  let(:user){User.first}
+  let(:user){create(:user)}
+  let(:secret){create(:secret, author: user )}
   before do
+    secret
     visit root_path
     sign_in(user)
+    click_link "All Secrets"
     click_link "Edit"
   end
 
-  context "with improper title" do
+  scenario "with improper title" do
     fill_in('Title', :with => '')
     fill_in('Body', :with => 'The owls are not what they seem. An amazing story catches every one involved in magic of this town.')
-    click_link "Update Secret"
+    click_button "Update Secret"
     expect(page).to have_content "Title is too short"
     expect(page).to have_css ('div#error_explanation')
   end
 
-  context "with improper body" do
+  scenario "with improper body" do
     fill_in('Title', :with => 'The owls are faded')
     fill_in('Body', :with => 'asd')
-    click_link "Update Secret"
+    click_button "Update Secret"
     expect(page).to have_content "Body is too short"
     expect(page).to have_css ('div#error_explanation')
   end
 
-  context "Successfull Edit" do
-    click_link "Update Secret"
-    expect(page).to have_content "Body is too short"
+  scenario "Successfull Edit" do
+    click_button "Update Secret"
     expect(page).to have_content "Secret was successfully updated."
-    expect(page).to have_css ('p#notice')    
+    expect(page).to have_css ('p#notice')
   end
 
 end
 
 
 feature 'Deleting secret as signed in user' do
+  let(:user){create(:user)}
+  let(:user_one){create(:user)}
+  let(:secret){create(:secret, author: user )}
+  let(:secret_one){create(:secret, author: user_one )}
   before do
+    secret
+    secret_one
     visit root_path
+    sign_in(user)
+    click_link "All Secrets"
   end
 
-  context "deleting own secret" do
-
+  scenario "deleting own secret" do
+    click_link "Destroy"
+    expect(page).to have_content "Secret was successfully destroyed"
+    expect(page).to have_css('div.alert')
   end
 
-  context "unable to delet other's secret" do
-
+  scenario "unable to delete other's secret" do
+    click_link "Destroy"
+    expect(page).not_to have_link('Destroy')
   end
 
 end

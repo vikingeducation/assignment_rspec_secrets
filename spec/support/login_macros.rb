@@ -1,4 +1,4 @@
-module LoggingMacros
+module LoginMacros
 
   def sign_in(user)
     visit root_path
@@ -10,7 +10,7 @@ module LoggingMacros
 
   def sign_out
     visit root_path
-    click_button 'Sign out'
+    click_link 'Logout'
   end
 
 end
