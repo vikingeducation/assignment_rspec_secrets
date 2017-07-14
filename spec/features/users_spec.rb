@@ -181,7 +181,7 @@ feature 'Creating secret as signed in user' do
     click_link "Create Secret"
     expect(page).to have_content "Secret was successfully created."
     expect(page).to have_css ('p#notice')
-    expect(page).to have_content "The owls are faded"  
+    expect(page).to have_content "The owls are faded"
   end
 
 end
@@ -190,16 +190,34 @@ end
 
 
 feature 'Editing secret as signed in user' do
+  let(:user){User.first}
   before do
     visit root_path
+    sign_in(user)
+    click_link "Edit"
   end
 
   context "with improper title" do
-
+    fill_in('Title', :with => '')
+    fill_in('Body', :with => 'The owls are not what they seem. An amazing story catches every one involved in magic of this town.')
+    click_link "Update Secret"
+    expect(page).to have_content "Title is too short"
+    expect(page).to have_css ('div#error_explanation')
   end
 
   context "with improper body" do
+    fill_in('Title', :with => 'The owls are faded')
+    fill_in('Body', :with => 'asd')
+    click_link "Update Secret"
+    expect(page).to have_content "Body is too short"
+    expect(page).to have_css ('div#error_explanation')
+  end
 
+  context "Successfull Edit" do
+    click_link "Update Secret"
+    expect(page).to have_content "Body is too short"
+    expect(page).to have_content "Secret was successfully updated."
+    expect(page).to have_css ('p#notice')    
   end
 
 end
