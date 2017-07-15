@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'pry'
 
 describe 'UserRequests' do
 
@@ -20,6 +21,8 @@ describe 'UserRequests' do
 
    end
 
+# sessions#create
+
    describe "PATCH #edit" do
 
      before do
@@ -35,7 +38,9 @@ describe 'UserRequests' do
      end
 
      it "unauthorized users cannot edit someone else's profile" do
-
+       patch user_path(another_user), params: {:another_user => attributes_for(:user, :name => new_user_name) }
+       user.reload
+       expect(user.name).not_to eq(new_user_name)
      end
    end
 
@@ -60,7 +65,8 @@ describe 'UserRequests' do
     end
 
      it "unauthorized users cannot delete someone else's profile" do
-
+       expect{ delete user_path(another_user)}.to change(User, :count).by(0)
+       expect(response).to have_http_status(302)
      end
    end
 
