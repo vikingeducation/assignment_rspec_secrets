@@ -18,6 +18,27 @@ describe 'SecretRequests' do
 
   end
 
+  describe "PATCH #edit" do
+    it "authorized users can edit their secret" do
+
+    end
+
+    it "unauthorized users cannot edit someone else's secret" do
+
+    end
+  end
+
+
+  describe "DELETE #destroy" do
+    it "authorized users can delete their secret" do
+
+    end
+
+    it "unauthorized users cannot delete someone else's secret" do
+
+    end
+  end
+
 
 
 end

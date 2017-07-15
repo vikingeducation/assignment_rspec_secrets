@@ -26,6 +26,7 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
   config.include LoginMacros
+  config.include LoginReqMacros
 end
 
 # Checks for pending migration and applies them before tests are run.
