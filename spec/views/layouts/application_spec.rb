@@ -1,4 +1,4 @@
-require 'rails/helper'
+require 'rails_helper'
 
 describe 'layouts/application' do
 
@@ -7,7 +7,7 @@ describe 'layouts/application' do
   end
 
   it "not-logged-in User cannot see a 'Logout' link" do
-    
+
   end
 
 end
