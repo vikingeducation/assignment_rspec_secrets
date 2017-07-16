@@ -8,8 +8,5 @@ module LoginReqMacros
     delete session_path
   end
 
-  def current_user
-    User.find(session[:user_id]) if User.exists?(session[:user_id]) && session[:user_id]
-  end
 
 end
