@@ -22,7 +22,6 @@ describe 'secrets/index.html.erb' do
       def view.signed_in_user?
         true
       end
-      @user = user
       def view.current_user
         @user
       end
