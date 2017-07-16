@@ -28,11 +28,12 @@ describe 'SecretRequests' do
       login_as(user)
     end
 
-    it "proper submission creates a new secret" do
-      # post secrets_path, params: { :id => user.id, secret: attributes_for(:secret)}
-      # binding.pry
-      # expect(response).to be_success
-      expect{post secrets_path, params: { secret: attributes_for(:secret, :author_id => user.id) } }.to change(Secret, :count).by(1)
+    it "proper submission creates a new secret", :focus do
+      expect{post secrets_path, params: { secret: attributes_for(:secret) } }.to change(Secret, :count).by(1)
+    end
+
+    it "improper submission do not create a new secret" do
+      expect{post secrets_path, params: { secret: attributes_for(:secret, :author_id => 123) } }.to change(Secret, :count).by(0)
     end
 
     it "creates a flash message" do
