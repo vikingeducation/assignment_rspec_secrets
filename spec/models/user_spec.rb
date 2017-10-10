@@ -6,7 +6,7 @@ describe User do
   let(:user) { build(:user) }
 
   context "creating a new User:" do
-    it "is successful with valid attributes" do
+    it "is valid with default attributes" do
       expect(user).to be_valid
     end
 
