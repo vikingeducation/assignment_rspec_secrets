@@ -109,4 +109,18 @@ describe "SecretsRequests" do
       end
     end
   end
+
+  describe "Creating Secrets" do
+    describe "POST #create" do
+      it "creates a new Secret with proper params and if the User is logged in" do
+        expect { post secrets_path, params: { secret: attributes_for(:secret) } }.to change(Secret, :count).by(1)
+      end
+
+      it "sets a flash message with a successful Secret creation" do
+        post secrets_path, params: { secret: attributes_for(:secret) }
+        expect(flash[:notice]).not_to be_nil
+        expect(flash[:notice]).to eq("Secret was successfully created.")
+      end
+    end
+  end
 end
