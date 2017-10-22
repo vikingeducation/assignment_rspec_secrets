@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root 'secrets#index'
+  root :to => 'secrets#index'
 
   resources :secrets
   resources :users
