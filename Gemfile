@@ -34,6 +34,16 @@ gem 'bcrypt', '~> 3.1.7'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'guard-rspec', require: false
+end
+
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+end
+
+group :test do
+  gem 'shoulda-matchers', '~> 3.1'
 end
 
 # Use unicorn as the app server
@@ -44,4 +54,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
