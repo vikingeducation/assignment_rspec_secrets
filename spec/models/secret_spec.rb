@@ -24,9 +24,6 @@ describe Secret do
     let(:user){ build(:user) }
      let(:num_secrets){ 5 }
 
-     before do
-       secret = create_list(:secret, num_secrets, author: user)
-     end
 
      it "returns the most recent five of a User's secrets" do
        expect(num_secrets).to eq(5)

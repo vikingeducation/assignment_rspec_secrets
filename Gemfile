@@ -38,12 +38,15 @@ group :development do
 end
 
 group :development, :test do
+  gem 'hirb'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
 end
 
 group :test do
   gem 'shoulda-matchers', '~> 3.1'
+  gem 'capybara'
+  gem 'launchy'
 end
 
 # Use unicorn as the app server
