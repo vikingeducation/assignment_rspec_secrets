@@ -51,4 +51,16 @@ RSpec.describe Secret, type: :model do
       expect(secret.errors[:body]).to include 'is too long (maximum is 140 characters)'
     end
   end
+
+  describe '#last_five' do
+    it 'returns 5 secrets' do
+      create_list :secret, 6
+      expect(Secret.last_five.size).to eq 5
+    end
+
+    it 'returns them in descending order of ID' do
+      ordered_list = create_list(:secret, 5).reverse
+      expect(Secret.last_five).to match ordered_list
+    end
+  end
 end
