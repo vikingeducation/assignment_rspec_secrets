@@ -64,17 +64,21 @@ class SecretsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    # In this case, we will (intentionally) get an error if 
-    #   the secret you're trying to access doesn't belong to you
-    # In real world scenarios, we'd be more likely to set a
-    #   flash message and redirect with a proper error code here
-    def set_secret
+  # Use callbacks to share common setup or constraints between actions.
+  # In this case, we will (intentionally) get an error if
+  #   the secret you're trying to access doesn't belong to you
+  # In real world scenarios, we'd be more likely to set a
+  #   flash message and redirect with a proper error code here
+  def set_secret
+    begin
       @secret = current_user.secrets.find(params[:id])
+    rescue
+      redirect_to secrets_path, notice: 'Not authorized to mess with secret!'
     end
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def secret_params
-      params.require(:secret).permit(:title, :body)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def secret_params
+    params.require(:secret).permit(:title, :body)
+  end
 end
