@@ -2,12 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Secret, type: :model do
   let(:secret){ build(:secret) }
-
-  def generate_string(qty)
-    str = ''
-    qty.times { str += 'x' }
-    str
-  end
+  let(:title_min){ 4 }
+  let(:title_max){ 24 }
+  let(:body_min){ 4 }
+  let(:body_max){ 140 }
 
   describe 'basic validity' do
     it 'test basic validity of secrets'
@@ -29,12 +27,12 @@ RSpec.describe Secret, type: :model do
     end
 
     it "with a title that's too short is invalid" do
-      secret = build(:secret, title: generate_string(3))
+      secret = build(:secret, title: generate_string(title_min - 1))
       expect(secret).not_to be_valid
     end
 
     it "with a title that's too long is invalid" do
-      secret = build(:secret, title: generate_string(25))
+      secret = build(:secret, title: generate_string(title_max + 1))
       expect(secret).not_to be_valid
     end
 
@@ -44,12 +42,12 @@ RSpec.describe Secret, type: :model do
     end
 
     it "with a body that's too short is invalid" do
-      secret = build(:secret, body: generate_string(3))
+      secret = build(:secret, body: generate_string(body_min - 1))
       expect(secret).not_to be_valid
     end
 
     it "with a body that's too long is invalid" do
-      secret = build(:secret, body: generate_string(141))
+      secret = build(:secret, body: generate_string(body_max + 1))
       expect(secret).not_to be_valid
     end
 

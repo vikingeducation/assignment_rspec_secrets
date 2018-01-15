@@ -2,6 +2,10 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   let(:user){ build(:user) }
+  let(:name_min){ 3 }
+  let(:name_max){ 20 }
+  let(:email_min){ 6 }
+  let(:email_max){ 16 }
 
   describe 'basic validity' do
     it 'test basic validity of users'
@@ -18,12 +22,12 @@ RSpec.describe User, type: :model do
     end
 
     it "with a name that's too short is invalid" do
-      user = build(:user, name: 'A')
+      user = build(:user, name: generate_string(name_min - 1))
       expect(user).not_to be_valid
     end
 
     it "with a name that's too long is invalid" do
-      user = build(:user, name: 'this is longer than 20 characters')
+      user = build(:user, name: generate_string(name_max + 1))
       expect(user).not_to be_valid
     end
 
@@ -44,12 +48,12 @@ RSpec.describe User, type: :model do
     end
 
     it "with a password that's too short is invalid" do
-      user = build(:user, password: '12345')
+      user = build(:user, password: generate_string(email_min - 1))
       expect(user).not_to be_valid
     end
 
     it "with a password that's too long is invalid" do
-      user = build(:user, password: '12345678901234567')
+      user = build(:user, password: generate_string(email_max + 1))
       expect(user).not_to be_valid
     end
   end
