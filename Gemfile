@@ -44,6 +44,11 @@ group :development do
   gem 'guard-rspec', require: false
 end
 
+group :test do
+  gem 'capybara'
+  gem 'launchy'
+end
+
 # Use unicorn as the app server
 # gem 'unicorn'
 
