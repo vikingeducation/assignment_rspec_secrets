@@ -6,10 +6,4 @@ FactoryBot.define do
     password 'password'
   end
 
-  factory :secret do
-    title 'foo secret title'
-    body 'foo secret body'
-    author
-  end
-
 end
