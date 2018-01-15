@@ -62,6 +62,18 @@ RSpec.describe Secret, type: :model do
   end
 
   describe 'model methods' do
+    describe '.last_five' do
+
+      let(:expected_secrets){ 5 }
+
+      before do
+        create_list(:secret, expected_secrets + 1)
+      end
+
+      it "returns the last 5 secrets" do
+        expect(Secret.last_five.count).to eq(expected_secrets)
+      end
+    end
   end
 
 end
