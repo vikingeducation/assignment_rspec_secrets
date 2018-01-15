@@ -56,6 +56,9 @@ RSpec.describe Secret, type: :model do
   end
 
   describe 'associations' do
+    it "responds to #author" do
+      expect(secret).to respond_to(:author)
+    end
   end
 
   describe 'model methods' do

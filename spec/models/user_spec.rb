@@ -56,6 +56,9 @@ RSpec.describe User, type: :model do
 
 
   describe 'associations' do
+    it "responds to #secrets" do
+      expect(user).to respond_to(:secrets)
+    end
   end
 
   describe 'model methods' do
