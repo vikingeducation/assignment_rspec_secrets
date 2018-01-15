@@ -21,6 +21,12 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_valid
     end
 
+    it "with a name that's in the length range is valid" do
+      user_1 = build(:user, name: generate_string(name_min))
+      user_2 = build(:user, name: generate_string(name_max))
+      expect([user_1, user_2]).to all(be_valid)
+    end
+
     it "with a name that's too short is invalid" do
       user = build(:user, name: generate_string(name_min - 1))
       expect(user).not_to be_valid

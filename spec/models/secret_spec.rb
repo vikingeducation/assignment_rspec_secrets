@@ -26,6 +26,12 @@ RSpec.describe Secret, type: :model do
       expect(secret).not_to be_valid
     end
 
+    it "with a title that's in the length range is valid" do
+      secret_1 = build(:secret, title: generate_string(title_min))
+      secret_2 = build(:secret, title: generate_string(title_max))
+      expect([secret_1, secret_2]).to all(be_valid)
+    end
+
     it "with a title that's too short is invalid" do
       secret = build(:secret, title: generate_string(title_min - 1))
       expect(secret).not_to be_valid
@@ -39,6 +45,12 @@ RSpec.describe Secret, type: :model do
     it "without a body is invalid" do
       secret = build(:secret, body: nil)
       expect(secret).not_to be_valid
+    end
+
+    it "with a body that's in the length range is valid" do
+      secret_1 = build(:secret, body: generate_string(body_min))
+      secret_2 = build(:secret, body: generate_string(body_max))
+      expect([secret_1, secret_2]).to all(be_valid)
     end
 
     it "with a body that's too short is invalid" do
