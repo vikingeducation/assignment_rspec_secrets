@@ -26,10 +26,57 @@ RSpec.feature User, type: :feature do
   end
 
   context 'User accounts' do
-    scenario "As a not-signed-in user, I want to sign in to my account"
-    scenario "As a signed-in user, I want to be able to create a secret"
-    scenario "As a signed-in user, I want to be able to edit one of my secrets"
-    scenario "As a signed-in user, I want to be able to delete one of my secrets"
+    let(:user){ create(:user) }
+
+    context "As a not-signed-in user" do
+      scenario "I want to sign in to my account" do
+        login(user)
+        expect(page).to have_content(user.name)
+      end
+    end
+
+    context "As a signed-in user" do
+      scenario "I want to be able to create a secret" do
+        login(user)
+
+        visit secrets_path
+        expect(page).to have_content('New Secret')
+        click_link('New Secret')
+
+        title = generate_string(15)
+        fill_in('Title', with: title )
+        fill_in('Body', with: generate_string(130))
+        expect{ click_button("Create Secret") }.to change(Secret, :count).by(1)
+        expect(page).to have_content(title)
+        expect(page).to have_content("Secret was successfully created")
+      end
+
+      scenario "I want to be able to edit one of my secrets" do
+        login(user)
+        secret = create_secret(user)
+        visit root_path
+
+        click_link('Edit')
+        expect(current_path).to eq(edit_secret_path(secret))
+        expect(page).to have_content('Edit')
+
+        changed_title = 'Changed Title'
+        fill_in('Title', with: changed_title)
+        click_button('Update Secret')
+
+        expect(page).to have_content('Secret was successfully updated')
+        expect(page).to have_content(changed_title)
+      end
+
+      scenario "I want to be able to delete one of my secrets" do
+        login(user)
+        secret = create_secret(user)
+        visit root_path
+
+        click_link('Destroy')
+        expect(page).to_not have_content(secret.title)
+      end
+    end
   end
 
 
