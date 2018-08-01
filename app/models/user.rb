@@ -8,6 +8,5 @@ class User < ApplicationRecord
   validates :name, :length => { :in => 3..20 }
   validates :email, :uniqueness => true
   validates :password,
-            :length => { :in => 6..16 },
-            :allow_nil => true
+            :length => { :in => 6..16 }
 end
